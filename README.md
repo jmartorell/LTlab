@@ -17,7 +17,7 @@ i.e
 
 ## Contents
 
-### subdirectory texts
+### subdirectory `texts`
 
 Texts to analyze go in the texts subdirectory Files are name coded
 
