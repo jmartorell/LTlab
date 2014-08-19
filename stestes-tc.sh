@@ -91,16 +91,17 @@ elif [ -f texts/tc-$1.txt ]; then
   FILELIST_SINGLE=`ls -rS texts/tc-$1.txt`
   process_single
 elif [ "$1" == "all" ]; then
-  FILELIST_FF=`ls texts/tc-falsosamigos.txt`
+  FILELIST_FF=`ls -rS texts/tc-falsosamigos-??-??.txt`
   FILELIST_SEG=`ls texts/tc-segmentation.txt`
   FILELIST_DUAL=`ls texts/tc-*-??.txt`
   #pat="ls texts/tc-!(falsosamigos|segmentation|*-??).txt"
+  #TODO: remove falsosamigos from general list
   FILELIST_SINGLE=`ls texts/tc-*.txt | grep -v "ok\|ko\|falsosamigos\|segmentation"`
   #echo $FILELIST_SINGLE
-  process_falsefriends
   process_segmentation
   process_dual
   process_single
+  process_falsefriends  
 elif [ "$1" == "cmp" ]; then
   FILELIST=`ls -rS texts/tc-*.txt`
   compare $2

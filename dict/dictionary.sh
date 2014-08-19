@@ -16,7 +16,7 @@ _help()
 
 function dict_export {
   java -cp ../dist/languagetool.jar org.languagetool.dev.DictionaryExporter \
-  ../../ws/languagetool/languagetool-language-modules/es/src/main/resources/org/languagetool/resource/es/spanish.dict >dictionary.dump
+  ../languagetool/languagetool-language-modules/es/src/main/resources/org/languagetool/resource/es/spanish.dict >dictionary.dump
 }
 
 function dict_build {
