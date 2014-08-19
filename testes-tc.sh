@@ -18,7 +18,7 @@ function process {
 for file in $FILELIST
 	{
 		echo "Processing $file"
-		java -jar ../dist/languagetool-commandline.jar --language es \
+		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file >$file.log	
 	}
@@ -28,7 +28,7 @@ function process_falsefriends {
 for file in $FILELIST_FF
 	{
 		echo "Processing falsefriends $file"
-		java -jar ../dist/languagetool-commandline.jar --language ${file:22:2} --mothertongue ${file:25:2} \
+		java -jar ./dist/languagetool-commandline.jar --language ${file:22:2} --mothertongue ${file:25:2} \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file >$file.log	
 	}
@@ -38,7 +38,7 @@ function process_segmentation {
 for file in $FILELIST_SEG
 	{
 		echo "Processing segmentation $file"
-		java -jar ../dist/languagetool-commandline.jar --language es \
+		java -jar ./dist/languagetool-commandline.jar --language es \
                 --disable HUNSPELL_RULE \
         $file >$file.log	
 	}
@@ -48,7 +48,7 @@ function process_dual {
 for file in $FILELIST_DUAL
 	{
 		echo "Processing dual   $file"
-		java -jar ../dist/languagetool-commandline.jar --language es \
+		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file >$file.log	
 	}
@@ -58,7 +58,7 @@ function process_single {
 for file in $FILELIST_SINGLE
 	{
 		echo "Processing single $file"
-		java -jar ../dist/languagetool-commandline.jar --language es \
+		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file >$file.log	
 	}

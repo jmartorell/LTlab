@@ -21,7 +21,7 @@ function process {
 for file in $FILELIST
 	{
 		echo "Processing $file"
-		java -jar ../dist/languagetool-commandline.jar --language es -v \
+		java -jar ./dist/languagetool-commandline.jar --language es -v \
 		--enable EN_BASE_A \
 		 $file >/dev/null 2>$file.da.log	
 	}

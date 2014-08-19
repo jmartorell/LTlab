@@ -20,7 +20,7 @@ function process {
 for file in $FILELIST
 	{
 		echo "Processing $file"
-		java -jar ../dist/languagetool-commandline.jar --language es \
+		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file >$file.log	
 	}

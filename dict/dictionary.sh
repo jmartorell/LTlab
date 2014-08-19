@@ -15,13 +15,13 @@ _help()
 }
 
 function dict_export {
-  java -cp ../../dist/languagetool.jar org.languagetool.dev.DictionaryExporter \
+  java -cp ../dist/languagetool.jar org.languagetool.dev.DictionaryExporter \
   ../../ws/languagetool/languagetool-language-modules/es/src/main/resources/org/languagetool/resource/es/spanish.dict >dictionary.dump
 }
 
 function dict_build {
-  java -cp ../../dist/languagetool.jar org.languagetool.dev.POSDictionaryBuilder \
-  dictionary.dump ../../dist/org/languagetool/resource/es/spanish.info
+  java -cp ../dist/languagetool.jar org.languagetool.dev.POSDictionaryBuilder \
+  dictionary.dump ../dist/org/languagetool/resource/es/spanish.info
 }
 
 if [ -z "$1" ]; then
