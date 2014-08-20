@@ -125,6 +125,20 @@ All logs go to `texts` subdirectory. To create a comparison start, copy file to 
 
   Run languageTool on texts and generate logs both regular and ordered.
 
-* `dict/dictionary.sh`
+### Subdirectory `dict`
+
+* `dictionary.sh`
 
   Utility to export/rebuild the POS dictionary.
+  
+* `split.awk`
+
+  Splits the dictionary dump created by `dictionary.sh export` in more manageable parts.
+  
+* `resemble.sh`
+
+  Integrate the parts created by `split.awk` the POS dictionary.
+  
+* `count.awk`
+
+  Counts the entries in the dictionary dump.
