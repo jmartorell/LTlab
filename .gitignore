@@ -1,0 +1,10 @@
+*~
+*.bak
+*.txt
+*.geany
+logs/*
+texts/tl-*
+texts/*.log
+dist
+languagetool
+.ignore
