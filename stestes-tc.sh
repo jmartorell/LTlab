@@ -20,7 +20,7 @@ for file in $FILELIST
 		echo "Processing $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file | tee $file.log | gawk -f stats.awk >$file.s.log
+		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log
 	}
 }
 
@@ -30,7 +30,7 @@ for file in $FILELIST_FF
 		echo "Processing falsefriends $file"
 		java -jar ./dist/languagetool-commandline.jar --language ${file:22:2} --mothertongue ${file:25:2} \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file | tee $file.log | gawk -f stats.awk >$file.s.log	
+		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log	
 	}
 }
 
@@ -40,7 +40,7 @@ for file in $FILELIST_SEG
 		echo "Processing segmentation $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
                 --disable HUNSPELL_RULE \
-        $file | tee $file.log | gawk -f stats.awk >$file.s.log	
+        $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log	
 	}
 }
 
@@ -50,7 +50,7 @@ for file in $FILELIST_DUAL
 		echo "Processing dual   $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file | tee $file.log | gawk -f stats.awk >$file.s.log
+		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log
 	}
 }
 
@@ -60,7 +60,7 @@ for file in $FILELIST_SINGLE
 		echo "Processing single $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file | tee $file.log | gawk -f stats.awk >$file.s.log
+		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log
 	}
 }
 
@@ -69,9 +69,9 @@ for file in $FILELIST
 	{
 		echo "Processing $file ------------------"
         if [ "$1" == "timing" ];then
-			diff -uN "logs/`echo $file | sed 's:texts/::'`".log $file.log
+			diff -uN "logs-old/`echo $file | sed 's:texts/::'`".log logs-new/${file:6}.log
 		else
-			diff -uNI sentences/sec "logs/`echo $file | sed 's:texts/::'`".log $file.log
+			diff -uNI sentences/sec "logs-old/`echo $file | sed 's:texts/::'`".log logs-new/${file:6}.log
 		fi
 	}
 }

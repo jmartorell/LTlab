@@ -20,7 +20,7 @@ for file in $FILELIST
 		echo "Processing $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file >$file.log	
+		 $file >logs/${file:6}.log	
 	}
 }
 
@@ -30,7 +30,7 @@ for file in $FILELIST_FF
 		echo "Processing falsefriends $file"
 		java -jar ./dist/languagetool-commandline.jar --language ${file:22:2} --mothertongue ${file:25:2} \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file >$file.log	
+		 $file >logs/${file:6}.log	
 	}
 }
 
@@ -40,7 +40,7 @@ for file in $FILELIST_SEG
 		echo "Processing segmentation $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
                 --disable HUNSPELL_RULE \
-        $file >$file.log	
+        $file >logs/${file:6}.log	
 	}
 }
 
@@ -50,7 +50,7 @@ for file in $FILELIST_DUAL
 		echo "Processing dual   $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file >$file.log	
+		 $file >logs/${file:6}.log	
 	}
 }
 
@@ -60,19 +60,7 @@ for file in $FILELIST_SINGLE
 		echo "Processing single $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file >$file.log	
-	}
-}
-
-function compare {
-for file in $FILELIST
-	{
-		echo "Processing $file ------------------"
-        if [ "$1" == "timing" ];then
-			diff -uN "logs/`echo $file | sed 's:texts/::'`".log $file.log
-		else
-			diff -uNI sentences/sec "logs/`echo $file | sed 's:texts/::'`".log $file.log
-		fi
+		 $file >logs/${file:6}.log	
 	}
 }
 
@@ -97,13 +85,10 @@ elif [ "$1" == "all" ]; then
   #pat="ls texts/tc-!(falsosamigos|segmentation|*-??).txt"
   FILELIST_SINGLE=`ls texts/tc-*.txt | grep -v "ok\|ko\|falsosamigos\|segmentation"`
   #echo $FILELIST_SINGLE
-  process_falsefriends
   process_segmentation
   process_dual
   process_single
-elif [ "$1" == "cmp" ]; then
-  FILELIST=`ls -rS texts/tc-*.txt`
-  compare $2
+  process_falsefriends  
 elif [ "$1" == "--help" ]; then
   _help
 else

@@ -22,7 +22,7 @@ for file in $FILELIST
 		echo "Processing $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
 		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
-		 $file | tee $file.log | gawk -f stats.awk >$file.s.log	
+		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log	
 	}
 }
 
@@ -31,9 +31,9 @@ for file in $FILELIST
 	{
 		echo "Processing $file ------------------"
         if [ "$1" == "t" ];then
-			diff -u "logs/`echo $file | sed 's:texts/::'`".log $file.log
+			diff -u logs-old/${file:6}.log logs-new/${file:6}.log
 		else
-			diff -uI sentences/sec "logs/`echo $file | sed 's:texts/::'`".log $file.log
+			diff -uI sentences/sec logs-old/${file:6}.log logs-new/${file:6}.log
 		fi
 	}
 }

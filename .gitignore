@@ -2,9 +2,9 @@
 *.bak
 *.txt
 *.geany
-logs/*
+logs-new/*
+logs-old/*
 texts/tl-*
-texts/*.log
 dist
 languagetool
 .ignore
