@@ -2,8 +2,8 @@
 *.bak
 *.txt
 *.geany
-logs-new/*
-logs-old/*
+logs*/*
+dict/*.dump
 texts/tl-*
 dist
 languagetool
