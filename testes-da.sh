@@ -23,7 +23,7 @@ for file in $FILELIST
 		echo "Processing $file"
 		java -jar ./dist/languagetool-commandline.jar --language es -v \
 		--enable EN_BASE_A \
-		 $file >/dev/null 2>logs-new/$file.da.log	
+		 $file >/dev/null 2>logs-new/${file:6}.log
 	}
 }
 
@@ -40,7 +40,7 @@ RULELIST=(D_R_N DNA DAN NSN ANA D_AN P_V D_N)
 for rule in ${RULELIST[@]}
 	{
 		echo -n "Rule ${rule}: "
-		cat texts/*.da.log | grep ${rule} | wc -l
+		cat logs-new/*.da.log | grep ${rule} | wc -l
 	}
 }
 
