@@ -23,7 +23,7 @@ for file in $FILELIST
 		echo "Processing $file"
 		java -jar ./dist/languagetool-commandline.jar --language es -v \
 		--enable EN_BASE_A \
-		 $file >/dev/null 2>logs-new/${file:6}.log
+		 $file >/dev/null 2>logs-new/${file:6}.da.log
 	}
 }
 
@@ -31,7 +31,7 @@ function compare {
 for file in $FILELIST
 	{
 		echo "Processing $file ------------------"
-		diff -u "logs-old/`echo $file | sed 's:texts/::'`".da.log logs-new/$file.da.log
+		diff -u "logs-old/`echo $file | sed 's:texts/::'`".da.log logs-new/${file:6}.da.log
 	}
 }
 
