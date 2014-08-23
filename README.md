@@ -142,3 +142,12 @@ All logs go to `texts` subdirectory. To create a comparison start, copy file to 
 * `count.awk`
 
   Counts the entries in the dictionary dump.
+  
+* `multiword.awk`
+
+  Processes files from [Ortografía española EAGLE](http://www.solosequenosenada.com/nexus/index.php?title=Ortografia_espa%C3%B1ola_EAGLE).
+  These files need to be saved as UTF-8 encoded files and processed by the script `multiword-assembler.sh`
+
+* `multiword-assembler.sh`
+
+  Provides correct processing of script `multiword.awk`
