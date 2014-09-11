@@ -31,7 +31,7 @@ function compare {
 for file in $FILELIST
 	{
 		echo "Processing $file ------------------"
-		diff -u "logs-old/`echo $file | sed 's:texts/::'`".da.log logs-new/$file.da.log
+		diff -u "logs-old/`echo $file | sed 's:texts/::'`".da.log logs-new/${file:6}.da.log
 	}
 }
 
