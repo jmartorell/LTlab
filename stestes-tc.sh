@@ -1,5 +1,5 @@
 #!/bin/bash
-# testes-tc.sh
+# stestes-tc.sh
 # Short test for Spanish grammar
 # Copyright (C) 2011 Juan Martorell
 #

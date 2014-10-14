@@ -1,5 +1,5 @@
 #!/bin/bash
-# testes-tl.sh
+# stestes-tl.sh
 # Long test for Spanish grammar
 # Copyright (C) 2010 Juan Martorell
 #
