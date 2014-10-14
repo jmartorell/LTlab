@@ -19,7 +19,7 @@ for file in $FILELIST
 	{
 		echo "Processing $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
-		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
+		--disable MORFOLOGIK_RULE_ES,HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log
 	}
 }
