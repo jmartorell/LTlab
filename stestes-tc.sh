@@ -29,7 +29,7 @@ for file in $FILELIST_FF
 	{
 		echo "Processing falsefriends $file"
 		java -jar ./dist/languagetool-commandline.jar --language ${file:22:2} --mothertongue ${file:25:2} \
-		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
+		--disable MORFOLOGIK_RULE_ES,HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log	
 	}
 }
@@ -39,7 +39,7 @@ for file in $FILELIST_SEG
 	{
 		echo "Processing segmentation $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
-                --disable HUNSPELL_RULE \
+                --disable MORFOLOGIK_RULE_ES,HUNSPELL_RULE \
         $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log	
 	}
 }
@@ -49,7 +49,7 @@ for file in $FILELIST_DUAL
 	{
 		echo "Processing dual   $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
-		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
+		--disable MORFOLOGIK_RULE_ES,HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log
 	}
 }
@@ -59,7 +59,7 @@ for file in $FILELIST_SINGLE
 	{
 		echo "Processing single $file"
 		java -jar ./dist/languagetool-commandline.jar --language es \
-		--disable HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
+		--disable MORFOLOGIK_RULE_ES,HUNSPELL_RULE,WHITESPACE_RULE,UNPAIRED_BRACKETS,COMMA_PARENTHESIS_WHITESPACE,DOUBLE_PUNCTUATION \
 		 $file | tee logs/${file:6}.log | gawk -f stats.awk >logs-new/${file:6}.s.log
 	}
 }
