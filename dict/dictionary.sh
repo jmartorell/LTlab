@@ -11,6 +11,7 @@ _help()
   echo '  where {command} is'
   echo '       export: Creates a dictionary in current location from the one in the workspace'
   echo '       build: creates a dict file based on the exported'
+  echo '       synth: creates a synth dict file based on the exported'
   exit
 }
 
@@ -24,12 +25,19 @@ function dict_build {
   dictionary.dump ../dist/org/languagetool/resource/es/spanish.info
 }
 
+function synth_dict_build {
+  java -cp ../dist/languagetool.jar org.languagetool.dev.SynthDictionaryBuilder \
+  dictionary.dump ../dist/org/languagetool/resource/es/spanish_synth.info
+}
+
 if [ -z "$1" ]; then
   _help
 elif [ "$1" == "export" ]; then
   dict_export
 elif [ "$1" == "build" ]; then
   dict_build
+elif [ "$1" == "synth" ]; then
+  synth_dict_build  
 elif [ "$1" == "--help" ]; then
   _help
 else
