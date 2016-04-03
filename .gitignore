@@ -2,9 +2,11 @@
 *.bak
 *.txt
 *.geany
+*.jar
 logs*/*
 dict/*.dump
 texts/tl-*
+texts/eswiki.*
 dist
 languagetool
 .ignore
