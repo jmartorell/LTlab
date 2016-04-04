@@ -3,6 +3,8 @@
 *.txt
 *.geany
 *.jar
+*.sqlite
+.idea/
 logs*/*
 dict/*.dump
 dict/*.dmp
