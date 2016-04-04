@@ -5,8 +5,9 @@
 *.jar
 logs*/*
 dict/*.dump
+dict/*.dmp
 texts/tl-*
-texts/eswiki.*
+texts/eswiki*
 dist
 languagetool
 .ignore
