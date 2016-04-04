@@ -2,4 +2,5 @@
 java -jar languagetool-wikipedia.jar check-data \
 --rule-properties wikipediadisabledrules.properties \
 --file texts/eswiki-latest-pages-articles.xml \
---language es
+--language es \
+  | tee logs/eswiki-latest-pages-articles.log
