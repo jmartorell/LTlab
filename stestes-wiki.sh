@@ -17,12 +17,12 @@ _help()
 }
 
 function checkwiki {
-	echo "Processing $1"
+	echo "Processing $1.xml"
 	java -jar languagetool-wikipedia.jar check-data \
 	--rule-properties wikipediadisabledrules.properties \
-	--file texts/$1 \
+	--file texts/$1.xml \
 	--language es \
-	  | tee logs/$1.log
+	  | tee logs/$1.xml.log | gawk -f stats.awk >logs-new/$1.xml.s.log
 }
 
 function compare {
@@ -36,10 +36,10 @@ for file in $FILELIST
 		fi
 	}
 }
-cd texts
-FILE_WIKIPEDIA=`ls -rS eswiki-*.xml`
-FILE_WIKISOURCE=`ls -rS eswikisource-*.xml`
-cd ..
+
+FILE_WIKIPEDIA=`basename texts/eswiki-*.xml .xml`
+FILE_WIKISOURCE=`basename texts/eswikisource-*.xml .xml`
+
 if [ -z "$1" ]; then
   _help
 elif [ "$1" == "wikipedia" ]; then

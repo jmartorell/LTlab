@@ -28,8 +28,8 @@ cursor = conn.cursor()
 # cursor.execute("SELECT COUNT(*) FROM tags")
 # print ("loaded %i records" % cursor.fetchone())
 
-#cursor.execute("SELECT count(form) FROM tags WHERE pos=? AND form like ?", ("VMN0000", "%ir"))
-cursor.execute("SELECT form FROM tags WHERE pos=? AND form like ?", ("VMN0000", "%r"))
+#cursor.execute("SELECT count(word) FROM tags WHERE pos=? AND form like ?", ("VMN0000", "%ir"))
+cursor.execute("SELECT word FROM tags WHERE pos=? AND form like ?", ("VMN0000", "%r"))
 for row in cursor:
     lemma = row[0]
     print (lemma  + "\t" + lemma + "se")

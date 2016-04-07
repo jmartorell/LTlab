@@ -70,14 +70,14 @@ else:
     linecount = file_len("dictionary.dump")
 
     # Create table
-    cursor.execute("CREATE TABLE tags (form text, lemma text, pos text)")
+    cursor.execute("CREATE TABLE tags (word text, lemma text, pos text)")
 
     print ("Dumping file into database...")
     progress = 1
     with codecs.open("dictionary.dump", "r", "ISO-8859-1") as ins:
         for line in ins:
             tpl = line.strip('\n').split('\t')
-            cursor.execute("INSERT INTO tags (form, lemma, pos) VALUES (?,?,?)",tpl)
+            cursor.execute("INSERT INTO tags (word, lemma, pos) VALUES (?,?,?)",tpl)
             progress += 1
             if progress % 10000 == 0:
                  draw_progress_bar( progress /linecount, t )
