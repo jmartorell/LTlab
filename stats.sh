@@ -14,8 +14,7 @@ _help()
 function process {
 for file in $FILELIST
 	{
-		echo $file
-		echo `tail -1 $file`
+		echo $file `tail -1 $file`
 	}
 }
 
