@@ -18,8 +18,9 @@
 import sqlite3
 import codecs
 import time
-import sys
 import subprocess
+import progressbar as pb
+
 
 def file_len(fname):
     p = subprocess.Popen(['wc', '-l', fname], stdout=subprocess.PIPE,
@@ -29,62 +30,38 @@ def file_len(fname):
         raise IOError(err)
     return int(result.strip().split()[0])
 
-def draw_progress_bar(percent, start, barLen=30):
-    sys.stdout.write("\r")
-    progress = ""
-    for i in range(barLen):
-        if i < int(barLen * percent):
-            progress += "="
-        else:
-            progress += " "
-
-    elapsedTime = time.time() - start;
-    estimatedRemaining = int(elapsedTime * (1.0/percent) - elapsedTime)
-
-    if (percent == 1.0):
-        sys.stdout.write("[ %s ] %.1f%% Elapsed: %im %02is ETA: Done!\n" %
-            (progress, percent * 100, int(elapsedTime)/60, int(elapsedTime)%60))
-        sys.stdout.flush()
-        return
-    else:
-        sys.stdout.write("[ %s ] %.1f%% Elapsed: %im %02is ETA: %im%02is " %
-            (progress, percent * 100, int(elapsedTime)/60, int(elapsedTime)%60,
-             estimatedRemaining/60, estimatedRemaining%60))
-        sys.stdout.flush()
-        return
-
-print ("Accessing database")
+print("Accessing database")
 conn = sqlite3.connect("dictionary.sqlite")
 
-print ("Checking integrity")
+print("Checking integrity")
 cursor = conn.cursor()
 
 cursor.execute("SELECT COUNT(name) FROM sqlite_master WHERE type='table' AND name='tags'")
 if cursor.fetchone()[0] > 0:
     cursor.execute("SELECT COUNT(*) FROM tags")
-    print ("Database already exists with %i entries. Delete it before regenerating." % cursor.fetchone())
+    print("Database already exists with %i entries. Delete it before regenerating." % cursor.fetchone())
 else:
     t = time.time()
 
-    print ("Estimating file size")
+    print("Estimating file size")
     linecount = file_len("dictionary.dump")
 
     # Create table
     cursor.execute("CREATE TABLE tags (word text, lemma text, pos text)")
 
-    print ("Dumping file into database...")
+    print("Dumping file into database...")
     progress = 1
     with codecs.open("dictionary.dump", "r", "ISO-8859-1") as ins:
         for line in ins:
             tpl = line.strip('\n').split('\t')
-            cursor.execute("INSERT INTO tags (word, lemma, pos) VALUES (?,?,?)",tpl)
+            cursor.execute("INSERT INTO tags (word, lemma, pos) VALUES (?,?,?)", tpl)
             progress += 1
             if progress % 10000 == 0:
-                 draw_progress_bar( progress /linecount, t )
+                 pb.draw_progress_bar( progress /linecount, t )
         ins.close()
     conn.commit()
-    draw_progress_bar( 1, t )
-    print ("Loaded database in: %.3f sec" % (time.time()-t))
+    pb.draw_progress_bar( 1, t )
+    print("Loaded database in: %.3f sec" % (time.time()-t))
     cursor.execute("SELECT COUNT(*) FROM tags")
-    print ("loaded %i records" % cursor.fetchone())
+    print("loaded %i records" % cursor.fetchone())
     conn.close()

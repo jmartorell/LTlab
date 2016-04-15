@@ -2,12 +2,14 @@
 *.bak
 *.txt
 *.geany
-*.jar
-*.sqlite
+*.sqlite*
+*.?ar
+*.7z
 .idea/
 logs*/*
 dict/*.dump
 dict/*.dmp
+__pycache__
 texts/tl-*
 texts/eswiki*
 dist

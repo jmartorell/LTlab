@@ -22,7 +22,7 @@ function checkwiki {
 	--rule-properties wikipediadisabledrules.properties \
 	--file texts/$1.xml \
 	--language es \
-	  | tee logs/$1.xml.log | gawk -f stats.awk >logs-new/$1.xml.s.log
+	  | tee logs/$1.xml.log | gawk -f stats.awk >logs/$1.xml.s.log
 }
 
 function compare {
