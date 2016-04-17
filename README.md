@@ -1,20 +1,21 @@
 # LanguageTool lab
 
-Some BASH utilities to make the life of the Spanish rule developer for languagetool easier.
+Some BASH and Python utilities to make the life of the Spanish rule developer for LanguageTool easier.
 
 ## Instructions:
 
 Checkout the lab in any directory.
 
 Soft link a directory called `languagetool` to the checkedout LanguageTool Java project.
-Soft link a directory called `dist` to the last snapshot image compiled or downloaded.
 
 i.e
 
 ```
   $ ln -s /home/pepe/ideaProjects/languagetool /home/pepe/lab/languagetool
-  $ ln -s /home/pepe/ideaProjects/languagetool/languagetool-standalone/target/LanguageTool-2.7-SNAPSHOT/LanguageTool-2.7-SNAPSHOT/ /home/pepe/lab/dist
 ```
+
+Once and every time LanguageTool is built (i.e `mvn clean package -DskipTests`) run `relink.sh` to create or restore the links needed for the scripts to work.
+
 
 ## Contents
 
@@ -67,11 +68,52 @@ Texts to analyze go in the texts subdirectory Files are name coded
 * `da-vario.txt`
 
   Plain file with sentences with disambiguations.
+  
+#### Wikimedia backup dumps
 
-### Subdirectory `logs`
+Wikimedia backups dumps are compressed XML files with wikimedia sites' data and metadata.
+They can be found at [Wikimedia Downloads](https://dumps.wikimedia.org/backup-index.html).
+Once descompressed it is advisable to rename or link the files to a more predictable names.
+  
+* `eswiki-latest-pages-articles.xml`
 
+  Compressed file available at
+  XML file with a backup from the whole wikipedia.  
+  Suggested link: `eswikipedia.xml`
+  
+* `eswikisource-<datestamp>-pages-articles.xml`
 
-All logs go to `texts` subdirectory. To create a comparison start, copy file to `logs` subdirectory
+  XML file with a backup from the whole wikisource.
+  Compressed file available clicking the `eswikisource` link and picking `eswikisource-<datestamp>-pages-articles.xml.bz2`  
+  Suggested link: `eswikisource.xml`
+  
+* `eswikinews-<datestamp>-pages-articles.xml`
+  
+  XML file with a backup from the whole wikinews
+  Compressed file available clicking the `eswikinews` link and picking `eswikinews-<datestamp>-pages-articles.xml.bz2`  
+  Suggested link: `eswikinews.xml`
+  
+* `eswikibooks-<datestamp>-pages-meta-current.xml.bz2`
+  
+  XML file with a backup from the whole wikibooks
+  Compressed file available clicking the `eswikibooks` link and picking `eswikibooks<datestamp>-pages-articles.xml.bz2`  
+  Suggested link: `eswikibooks.xml`
+  
+* `eswikiversity-<datestamp>-pages-meta-current.xml.bz2`
+  
+  XML file with a backup from the whole wikiversity
+  Compressed file available clicking the `eswikiversity` link and picking `eswikiversity<datestamp>-pages-articles.xml.bz2`  
+  Suggested link: `eswikiversity.xml`
+  
+* `eswikivoyage-<datestamp>-pages-meta-current.xml.bz2`
+  
+  XML file with a backup from the whole wikivoyage
+  Compressed file available clicking the `eswikivoyage` link and picking `eswikivoyage<datestamp>-pages-articles.xml.bz2`    
+  Suggested link: `eswikivoyage.xml`
+  
+### Subdirectory `logs`, `logs_new`, `logs_old`
+
+All logs go to `logs` and `logs_new` subdirectory. To create a comparison start, copy file to `logs_old` subdirectory
 
 #### Scripts included:
 

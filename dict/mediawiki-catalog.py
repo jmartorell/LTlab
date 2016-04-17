@@ -61,13 +61,33 @@ lastPageNo = 0  # Already processed pages -- stored in the database
 
 # For wikipedia
 db_file = "catalogwikipedia.sqlite"
-filename = '../texts/eswiki-latest-pages-articles.xml'
+filename = '../texts/eswikipedia.xml'
 estimatedPages = 3260545  # For progress and estimation
 
-# For Wikisource
+# # For Wikisource
 # db_file = "catalogwikisource.sqlite"
-# filename = '../texts/eswikisource-20160305-pages-articles.xml'
+# filename = '../texts/eswikisource.xml'
 # estimatedPages = 176888  # For progress and estimation
+
+# # For Wikibooks
+# db_file = "catalogwikibooks.sqlite"
+# filename = '../texts/eswikibooks.xml'
+# estimatedPages = 16608  # For progress and estimation
+
+# # For Wikiversity
+# db_file = "catalogwikiversity.sqlite"
+# filename = '../texts/eswikiversity.xml'
+# estimatedPages = 4529  # For progress and estimation
+
+# # For Wikinews
+# db_file = "catalogwikinews.sqlite"
+# filename = '../texts/eswikinews.xml'
+# estimatedPages = 28679  # For progress and estimation
+
+# # For Wikivoyage
+# db_file = "catalogwikivoyage.sqlite"
+# filename = '../texts/eswikivoyage.xml'
+# estimatedPages = 5790  # For progress and estimation
 
 upsert = """INSERT OR REPLACE INTO productions
 VALUES (:w,

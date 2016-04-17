@@ -17,7 +17,7 @@
 """
 Script to count pages of a Wikimedia backup dump.
 
-Accepts wikipedia or wikisource as parameter.
+Accepts filename, without directory or extension as parameter.
 Returns the total pagecount and a list of page title tags in the form "tag:title" an their occurrences.
 
 Ideas for parsing large xml files taken from http://boscoh.com/programming/reading-xml-serially.html
@@ -25,18 +25,21 @@ Ideas for parsing large xml files taken from http://boscoh.com/programming/readi
 import xml.etree.ElementTree as etree
 import re
 import sys
+import os
 
-filename_wikipedia = '../texts/eswiki-latest-pages-articles.xml'
-filename_wikisource = '../texts/eswikisource-20160305-pages-articles.xml'
+#filename_wikipedia = '../texts/eswiki-latest-pages-articles.xml'
+#filename_wikisource = '../texts/eswikisource-20160305-pages-articles.xml'
 
 if len(sys.argv) == 1:
-    print ("Usage: %s wikipedia | wikisource ", sys.argv[0])
-elif sys.argv[1] == "wikisource":
-    filename = filename_wikisource
-elif sys.argv[1] == "wikipedia":
-    filename = filename_wikipedia
+    print ("Usage: %s wikifile (must exist in ../texts) " % sys.argv[0])
+    exit(0)
+elif len(sys.argv) == 2:
+    filename = "../texts/" + sys.argv[1] + ".xml"
+    if not os.path.isfile(filename):
+        print("'%s': not found" % filename)
+        exit(1)
 else:
-    print("Usage: %s wikipedia | wikisource ", sys.argv[0])
+    print("Usage: %s wikipedia | wikisource " % sys.argv[0])
     exit(12)
 
 
@@ -60,6 +63,6 @@ for event, elem in etree.iterparse(filename, events=('start', 'end', 'start-ns',
                 else:
                     metaTags[tag] = 1
         elem.clear()
-print ("\n\n Total pages for file: %i" % pages)
+print ("\n\n Total pages for %s file: %i" % (sys.argv[1] + ".xml", pages))
 for tag in metaTags:
     print (tag, metaTags[tag])
