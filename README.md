@@ -16,6 +16,12 @@ i.e
 
 Once and every time LanguageTool is built (i.e `mvn clean package -DskipTests`) run `relink.sh` to create or restore the links needed for the scripts to work.
 
+There are some links created at `languagetool-language-modules/es/src/` (source files).
+These are created in stealth for git (ending with `~`) and the reason is
+making it easier to edit rule and disambiguation with XML Mind Personal edition.
+[Version 5.3.0](http://www.xmlmind.com/archive/xmleditor/5.3.0/)
+is the last version free for personal use.
+
 
 ## Contents
 
@@ -117,52 +123,56 @@ All logs go to `logs` and `logs_new` subdirectory. To create a comparison start,
 
 #### Scripts included:
 
-* `comparetoeclipse.sh`
+##### `relink.sh`
+
+Links or repairs links to the distribution and rules/disambiguator files.
+
+##### `comparetoeclipse.sh`
 
   Diff for grammar.xml and disambiguation.xml in both dist and dev dirs
 
-* `fullcomparison.sh`
+##### `fullcomparison.sh`
 
   Creates a file in /tmp/tmp.diff with all the diffs for all tc annd tl log files after a complete tc and tl run.
 
-* `grammarconsole.sh`
+##### `grammarconsole.sh`
 
   Interactive grammar console with debugger enabled.
 
-* `grammartest.sh`
+##### `grammartest.sh`
 
   View disambiguation from file texts/da-vario.txt in screen
 
-* `logstats.sh`
+##### `logstats.sh`
 
   Gets the last line from every log file in logs, so you can collect performance indicators.
 
-* `meld.sh`
+##### `meld.sh`
 
   Opens a meld window with useful predefined comparisons.
 
-* `nautilus.sh`
+##### `nautilus.sh`
 
   Opens a nautilus tabbed window with useful predefined directories.
 
-* `nautilus-newtab.sh`
+##### `nautilus-newtab.sh`
 
   Opens/reuses a nautilus window with directories passed by arguments
 
-* `stats.awk`
+##### `stats.awk`
 
   Enhanced version of the script by Marcin Miłkowsky
 
-* `stats.sh`
+##### `stats.sh`
 
   Gets the last line from every log file in texts, so you can collect performance indicators.
 
-* `testes-tc.sh`  
+##### `testes-tc.sh`  
   `testes-tl.sh`
 
   Run languageTool on texts and generate regular logs.
 
-* `stestes-tc.sh`  
+##### `stestes-tc.sh`  
   `stestes-tl.sh`
 
   Run languageTool on texts and generate logs both regular and ordered.

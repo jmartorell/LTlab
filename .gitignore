@@ -11,7 +11,7 @@ dict/*.dump
 dict/*.dmp
 __pycache__
 texts/tl-*
-texts/eswiki*
+texts/??wiki*
 dist
 languagetool
 .ignore
