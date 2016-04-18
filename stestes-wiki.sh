@@ -9,8 +9,7 @@ _help()
   echo "$0 {set}"
   echo
   echo '  where {set} is one of'
-  echo '       wikipedia: Test downloaded Wikipedia corpus'
-  echo '       wikisource: Test downloaded Wikisource corpus'
+  echo '       eswikipedia|eswikisource|eswikinews|...: Test downloaded corpus'
   echo '       all: Test all mediawiki dumped pages-articles data'
   echo '       cmp [t]: Compare current and previous logs [including timing]'
   exit
@@ -42,21 +41,25 @@ FILE_WIKISOURCE=`basename texts/eswikisource-*.xml .xml`
 
 if [ -z "$1" ]; then
   _help
-elif [ "$1" == "wikipedia" ]; then
-  checkwiki $FILE_WIKIPEDIA
-elif [ "$1" == "wikisource" ]; then
-  checkwiki $FILE_WIKISOURCE
 elif [ "$1" == "all" ]; then
-  checkwiki $FILE_WIKIPEDIA
-  checkwiki $FILE_WIKISOURCE
+  $FILES=`ls -b texts/eswiki*.xml`
+  for filename in $FILES
+  {
+	  checkwiki `basename $filename`
+  }
 elif [ "$1" == "cmp" ]; then
-  compare $FILE_WIKIPEDIA $2
-  compare $FILE_WIKISOURCE $2
+  FILELIST=$2.xml
+  compare $3
 elif [ "$1" == "--help" ]; then
   _help
 else
-  echo "** $1 is not a valid option."
-  echo
-  _help
+  FILE=texts/$1.xml
+  if [ -e $FILE ]; then
+    checkwiki $1
+  else
+    echo $FILE not found.
+    _help
+    exit 1
+  fi
 fi
 exit
