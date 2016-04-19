@@ -25,23 +25,15 @@ Ideas for parsing large xml files taken from http://boscoh.com/programming/readi
 import xml.etree.ElementTree as etree
 import re
 import sys
-import os
 
-#filename_wikipedia = '../texts/eswiki-latest-pages-articles.xml'
-#filename_wikisource = '../texts/eswikisource-20160305-pages-articles.xml'
+import wikifile
 
-if len(sys.argv) == 1:
-    print ("Usage: %s wikifile (must exist in ../texts) " % sys.argv[0])
-    exit(0)
-elif len(sys.argv) == 2:
-    filename = "../texts/" + sys.argv[1] + ".xml"
-    if not os.path.isfile(filename):
-        print("'%s': not found" % filename)
-        exit(1)
-else:
-    print("Usage: %s wikipedia | wikisource " % sys.argv[0])
-    exit(12)
+file_base = wikifile.file_base()
 
+if type(file_base) is int:
+    exit(file_base)
+
+filename = '../texts/es' + file_base + '.xml'
 
 pages = 0
 metaTags = {}

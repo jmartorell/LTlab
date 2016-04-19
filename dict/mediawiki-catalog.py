@@ -56,13 +56,6 @@ reMeta = re.compile("\[\[[\s\S]+?\]\]")
 reMetaCategory = re.compile("\[\[Categor.+\]\]")
 reLink = re.compile("\[http.+\]")
 reTag = re.compile("<.+?>")
-reAccent_a = re.compile("\&amp;aacute;")
-reAccent_e = re.compile("\&amp;eacute;")
-reAccent_i = re.compile("\&amp;iacute;")
-reAccent_o = re.compile("\&amp;oacute;")
-reAccent_u = re.compile("\&amp;uacute;")
-reDieresis = re.compile("\&amp;uuml;")
-reNtilde = re.compile("\&amp;ntilde;")
 reWord = re.compile("[a-záéíóúüñ]+([\-][a-záéíóúüñ]+)?")
 
 useful = True
@@ -87,41 +80,6 @@ estimatedPages = {'wikipedia': 3260545,
 db_file = 'catalog' + file_base + '.sqlite'
 
 estimated_pages = estimatedPages[file_base]
-
-# # For wikipedia
-# db_file = "catalogwikipedia.sqlite"
-# filename = '../texts/eswikipedia.xml'
-# estimatedPages = 3260545  # For progress and estimation
-
-# # For Wikisource
-# db_file = "catalogwikisource.sqlite"
-# filename = '../texts/eswikisource.xml'
-# estimatedPages = 176888  # For progress and estimation
-
-# # For Wikibooks
-# db_file = "catalogwikibooks.sqlite"
-# filename = '../texts/eswikibooks.xml'
-# estimatedPages = 16608  # For progress and estimation
-
-# # For Wikiversity
-# db_file = "catalogwikiversity.sqlite"
-# filename = '../texts/eswikiversity.xml'
-# estimatedPages = 4529  # For progress and estimation
-
-# # For Wikinews
-# db_file = "catalogwikinews.sqlite"
-# filename = '../texts/eswikinews.xml'
-# estimatedPages = 28679  # For progress and estimation
-
-# # For Wikivoyage
-# db_file = "catalogwikivoyage.sqlite"
-# filename = '../texts/eswikivoyage.xml'
-# estimatedPages = 5790  # For progress and estimation
-
-# # For Wikiquote
-# db_file = "catalogwikiquote.sqlite"
-# filename = '../texts/eswikiquote.xml'
-# estimatedPages = 19415  # For progress and estimation
 
 upsert = """INSERT OR REPLACE INTO productions
 VALUES (:w,
@@ -203,6 +161,7 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
                     pb.draw_progress_bar(pageNo/lastPageNo, startTime)
             elif (pageNo - lastPageNo) % 20000 == 0:
                 save_catalog()
+                localCatalog.clear()
 
     elif event == 'end':
         if pageNo >= lastPageNo:
@@ -223,13 +182,6 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
                             content = reMeta.sub("", content).lower()
                             content = reTag.sub("", content)
                             content = reLink.sub("", content)
-                            content = reAccent_a.sub("á", content)
-                            content = reAccent_e.sub("é", content)
-                            content = reAccent_i.sub("í", content)
-                            content = reAccent_o.sub("ó", content)
-                            content = reAccent_u.sub("ú", content)
-                            content = reDieresis.sub("ü", content)
-                            content = reNtilde.sub("ñ", content)
                             for match in reWord.finditer(content):
                                 word = match.group(0)
                                 if word in localCatalog:
