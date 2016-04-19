@@ -34,9 +34,14 @@ import xml.etree.ElementTree as Etree
 import sqlite3
 import re
 
-import sys
-import progressbar as pb
 import time
+import sys
+
+import progressbar as pb
+import wikifile
+
+
+
 
 nsmap = {}
 localCatalog = {}
@@ -51,6 +56,13 @@ reMeta = re.compile("\[\[[\s\S]+?\]\]")
 reMetaCategory = re.compile("\[\[Categor.+\]\]")
 reLink = re.compile("\[http.+\]")
 reTag = re.compile("<.+?>")
+reAccent_a = re.compile("\&amp;aacute;")
+reAccent_e = re.compile("\&amp;eacute;")
+reAccent_i = re.compile("\&amp;iacute;")
+reAccent_o = re.compile("\&amp;oacute;")
+reAccent_u = re.compile("\&amp;uacute;")
+reDieresis = re.compile("\&amp;uuml;")
+reNtilde = re.compile("\&amp;ntilde;")
 reWord = re.compile("[a-záéíóúüñ]+([\-][a-záéíóúüñ]+)?")
 
 useful = True
@@ -58,11 +70,28 @@ pageNo = 0  # Counter/pointer of page under inspection
 lastPageNo = 0  # Already processed pages -- stored in the database
 # Estimated pages: 3260545 for Wikipedia, 176888 fro Wikisource
 
+file_base = wikifile.file_base()
 
-# For wikipedia
-db_file = "catalogwikipedia.sqlite"
-filename = '../texts/eswikipedia.xml'
-estimatedPages = 3260545  # For progress and estimation
+if type(file_base) is int:
+    exit(file_base)
+
+filename = '../texts/es' + file_base + '.xml'
+
+estimatedPages = {'wikipedia': 3260545,
+                  'wikisource': 176888,
+                  'wikibooks': 16608,
+                  'wikiversity': 4529,
+                  'wikinews': 28679,
+                  'wikivoyage': 5790,
+                  'wikiquote': 19415}  # For progress and estimation
+db_file = 'catalog' + file_base + '.sqlite'
+
+estimated_pages = estimatedPages[file_base]
+
+# # For wikipedia
+# db_file = "catalogwikipedia.sqlite"
+# filename = '../texts/eswikipedia.xml'
+# estimatedPages = 3260545  # For progress and estimation
 
 # # For Wikisource
 # db_file = "catalogwikisource.sqlite"
@@ -88,6 +117,11 @@ estimatedPages = 3260545  # For progress and estimation
 # db_file = "catalogwikivoyage.sqlite"
 # filename = '../texts/eswikivoyage.xml'
 # estimatedPages = 5790  # For progress and estimation
+
+# # For Wikiquote
+# db_file = "catalogwikiquote.sqlite"
+# filename = '../texts/eswikiquote.xml'
+# estimatedPages = 19415  # For progress and estimation
 
 upsert = """INSERT OR REPLACE INTO productions
 VALUES (:w,
@@ -119,6 +153,16 @@ def save_catalog():
     cursor.close()
     pb.draw_progress_bar(1, start)
 
+    elapsedTime = time.time() - startTime
+    try:
+        estimatedRemaining = int((estimated_pages - pageNo) / ((pageNo - lastPageNo) / elapsedTime))
+    except:
+        estimatedRemaining = 0
+
+    print("Processed %i pages out of %i in %im %02is -- ETA: %im%02is" %
+          (pageNo, estimated_pages,
+           int(elapsedTime) / 60, int(elapsedTime) % 60,
+           estimatedRemaining / 60, estimatedRemaining % 60))
 
 def prepare_database():
     """
@@ -159,16 +203,16 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
                     pb.draw_progress_bar(pageNo/lastPageNo, startTime)
             elif (pageNo - lastPageNo) % 10000 == 0:
                 save_catalog()
-                elapsedTime = time.time() - startTime
-                try:
-                    estimatedRemaining = int((estimatedPages - pageNo)/((pageNo - lastPageNo)/elapsedTime))
-                except:
-                    estimatedRemaining = 0
-
-                print("Processed %i pages out of %i in %im %02is -- ETA: %im%02is" %
-                      (pageNo, estimatedPages,
-                       int(elapsedTime)/60, int(elapsedTime) % 60,
-                       estimatedRemaining/60, estimatedRemaining % 60))
+                # elapsedTime = time.time() - startTime
+                # try:
+                #     estimatedRemaining = int((estimated_pages - pageNo)/((pageNo - lastPageNo)/elapsedTime))
+                # except:
+                #     estimatedRemaining = 0
+                #
+                # print("Processed %i pages out of %i in %im %02is -- ETA: %im%02is" %
+                #       (pageNo, estimated_pages,
+                #        int(elapsedTime)/60, int(elapsedTime) % 60,
+                #        estimatedRemaining/60, estimatedRemaining % 60))
     elif event == 'end':
         if pageNo >= lastPageNo:
             if reTitle.search(elem.tag) is not None:
@@ -186,6 +230,13 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
                             content = reMeta.sub("", content).lower()
                             content = reTag.sub("", content)
                             content = reLink.sub("", content)
+                            content = reAccent_a.sub("á", content)
+                            content = reAccent_e.sub("é", content)
+                            content = reAccent_i.sub("í", content)
+                            content = reAccent_o.sub("ó", content)
+                            content = reAccent_u.sub("ú", content)
+                            content = reDieresis.sub("ü", content)
+                            content = reNtilde.sub("ñ", content)
                             for match in reWord.finditer(content):
                                 word = match.group(0)
                                 if word in localCatalog:
