@@ -201,30 +201,23 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
             if pageNo < lastPageNo:
                 if pageNo % 1000 == 0:
                     pb.draw_progress_bar(pageNo/lastPageNo, startTime)
-            elif (pageNo - lastPageNo) % 10000 == 0:
+            elif (pageNo - lastPageNo) % 20000 == 0:
                 save_catalog()
-                # elapsedTime = time.time() - startTime
-                # try:
-                #     estimatedRemaining = int((estimated_pages - pageNo)/((pageNo - lastPageNo)/elapsedTime))
-                # except:
-                #     estimatedRemaining = 0
-                #
-                # print("Processed %i pages out of %i in %im %02is -- ETA: %im%02is" %
-                #       (pageNo, estimated_pages,
-                #        int(elapsedTime)/60, int(elapsedTime) % 60,
-                #        estimatedRemaining/60, estimatedRemaining % 60))
+
     elif event == 'end':
         if pageNo >= lastPageNo:
             if reTitle.search(elem.tag) is not None:
                 useful = reTitleDiscard.match(elem.text) is None
-                sys.stdout.write("\r%6s %s" % (useful, elem.text[:50].ljust(50)))
+                if (pageNo - lastPageNo) % 5000:
+                    sys.stdout.write("\r%6i" % pageNo)
+                    #sys.stdout.write("\r%6s %s" % (useful, elem.text[:50].ljust(50)))
             else:
                 if reText.search(elem.tag):
                     if useful:
                         try:
                             content = reTemplate.sub("", elem.text)
                         except:
-                            print("Exception at page %i text:\n%s" % (pageNo, sys.exc_info()[0]))
+                            print("\nException at page %i \ntext: %s" % (pageNo, sys.exc_info()[0]))
                             content = ""
                         if reMetaCategory.search(content) is not None:
                             content = reMeta.sub("", content).lower()
