@@ -1,3 +1,4 @@
+#!python3
 # Copyright (C) 2016 Juan Martorell
 #
 # This library is free software; you can redistribute it and/or
@@ -56,6 +57,13 @@ reMeta = re.compile("\[\[[\s\S]+?\]\]")
 reMetaCategory = re.compile("\[\[Categor.+\]\]")
 reLink = re.compile("\[http.+\]")
 reTag = re.compile("<.+?>")
+reAccent_a = re.compile("\&aacute;")
+reAccent_e = re.compile("\&eacute;")
+reAccent_i = re.compile("\&iacute;")
+reAccent_o = re.compile("\&oacute;")
+reAccent_u = re.compile("\&uacute;")
+reDieresis = re.compile("\&uuml;")
+reNtilde = re.compile("\&ntilde;")
 reWord = re.compile("[a-záéíóúüñ]+([\-][a-záéíóúüñ]+)?")
 
 useful = True
@@ -81,13 +89,16 @@ db_file = 'catalog' + file_base + '.sqlite'
 
 estimated_pages = estimatedPages[file_base]
 
-upsert = """INSERT OR REPLACE INTO productions
-VALUES (:w,
-  COALESCE(
-    (SELECT ocurrences FROM productions
-       WHERE word=:w),
-    0) + :c);
-"""
+# upsert = """INSERT OR REPLACE INTO productions
+# VALUES (:w,
+#   COALESCE(
+#     (SELECT ocurrences FROM productions
+#        WHERE word=:w),
+#     0) + :c);
+# """
+
+insert = """INSERT INTO productions
+VALUES (:w, :c)"""
 
 
 def save_catalog():
@@ -103,10 +114,11 @@ def save_catalog():
     cursor = conn.cursor()
     for w in localCatalog:
         progress += 1
-        cursor.execute(upsert, {"w": w, "c": localCatalog[w]})
+        # cursor.execute(upsert, {"w": w, "c": localCatalog[w]})
+        cursor.execute(insert, {"w": w, "c": localCatalog[w]})
         if progress % 5000 == 0:
             pb.draw_progress_bar(progress/total, start)
-    cursor.execute("UPDATE counters set value = ? WHERE counter = 'page'", (pageNo,))
+    #cursor.execute("UPDATE counters set value = ? WHERE counter = 'page'", (pageNo,))
     conn.commit()
     cursor.close()
     pb.draw_progress_bar(1, start)
@@ -133,14 +145,16 @@ def prepare_database():
     cursor.execute("SELECT COUNT(name) FROM sqlite_master WHERE type='table' AND name='productions'")
     global lastPageNo
     if cursor.fetchone()[0] > 0:
-        cursor.execute("SELECT value FROM counters where counter ='page'")
-        lastPageNo = cursor.fetchone()[0]
-        print("Database already exists with %i pages processed." % lastPageNo)
+        # cursor.execute("SELECT value FROM counters where counter ='page'")
+        # lastPageNo = cursor.fetchone()[0]
+        #print("Database already exists with %i pages processed." % lastPageNo)
+        cursor.execute("DELETE FROM TABLE productions")
+        print("Table initialized")
     else:
         # Create table
         cursor.execute("CREATE TABLE productions (word text PRIMARY KEY, ocurrences integer)")
-        cursor.execute("CREATE TABLE counters (counter text, value integer)")
-        cursor.execute("INSERT INTO counters values ('page', 0)")
+        #cursor.execute("CREATE TABLE counters (counter text, value integer)")
+        #cursor.execute("INSERT INTO counters values ('page', 0)")
         connection.commit()
         print("Database created")
     cursor.close()
@@ -156,19 +170,20 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
     elif event == "start":
         if rePage.search(elem.tag) is not None:
             pageNo += 1
-            if pageNo < lastPageNo:
-                if pageNo % 1000 == 0:
-                    pb.draw_progress_bar(pageNo/lastPageNo, startTime)
-            elif (pageNo - lastPageNo) % 20000 == 0:
-                save_catalog()
-                localCatalog.clear()
+            # if pageNo < lastPageNo:
+            #     if pageNo % 1000 == 0:
+            #         pb.draw_progress_bar(pageNo/lastPageNo, startTime)
+            # elif (pageNo - lastPageNo) % 20000 == 0:
+            #     save_catalog()
+            #     localCatalog.clear()
 
     elif event == 'end':
         if pageNo >= lastPageNo:
             if reTitle.search(elem.tag) is not None:
                 useful = reTitleDiscard.match(elem.text) is None
-                if (pageNo - lastPageNo) % 5000:
-                    sys.stdout.write("\r%6i" % pageNo)
+                if (pageNo - lastPageNo) % 1000 == 0:
+                    pb.draw_progress_bar(pageNo/estimated_pages, startTime)
+                    #sys.stdout.write("\r%6i" % pageNo)
                     #sys.stdout.write("\r%6s %s" % (useful, elem.text[:50].ljust(50)))
             else:
                 if reText.search(elem.tag):
@@ -182,6 +197,13 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
                             content = reMeta.sub("", content).lower()
                             content = reTag.sub("", content)
                             content = reLink.sub("", content)
+                            content = reAccent_a.sub("á", content)
+                            content = reAccent_e.sub("é", content)
+                            content = reAccent_i.sub("í", content)
+                            content = reAccent_o.sub("ó", content)
+                            content = reAccent_u.sub("ú", content)
+                            content = reDieresis.sub("ü", content)
+                            content = reNtilde.sub("ñ", content)
                             for match in reWord.finditer(content):
                                 word = match.group(0)
                                 if word in localCatalog:
