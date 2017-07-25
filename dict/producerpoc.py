@@ -15,13 +15,17 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301
 # USA
 
+"""
+Proof of concept for word generation.
+"""
+
 import sqlite3
 import codecs
 import time
 
 t = time.time()
 
-conn = sqlite3.connect("dictionary.sqlite")
+conn = sqlite3.connect("db/dictionary.sqlite")
 
 cursor = conn.cursor()
 
@@ -29,9 +33,15 @@ cursor = conn.cursor()
 # print ("loaded %i records" % cursor.fetchone())
 
 #cursor.execute("SELECT count(word) FROM tags WHERE pos=? AND form like ?", ("VMN0000", "%ir"))
-cursor.execute("SELECT word FROM tags WHERE pos=? AND form like ?", ("VMN0000", "%r"))
+cursor.execute("SELECT word FROM tags WHERE pos=? AND lemma like ?", ("VMN0000", "%r"))
 for row in cursor:
-    lemma = row[0]
-    print (lemma  + "\t" + lemma + "se")
+    word = row[0]
+    print (word  + "\t\t" + word + "me")
+    print ("\t\t" + word + "te")
+    print ("\t\t" + word + "se")
+    print ("\t\t" + word + "nos")
+    print ("\t\t" + word + "os")
+    print ("\t\t" + word + "los")
+    print ("\t\t" + word + "les")
     #print ("%s" % row)
 
