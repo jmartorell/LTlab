@@ -203,3 +203,9 @@ Links or repairs links to the distribution and rules/disambiguator files.
 * `multiword-assembler.sh`
 
   Provides correct processing of script `multiword.awk`
+  
+* `spelldict.sh`
+
+  Starting from a hunspell dictionary, like the [Spanish spell dictionary for LibreOffice](https://github.com/LibreOffice/dictionaries/tree/master/es),
+  creates a plain text dump file and builds a LT compatible spell dictionary.
+  The dictionary needs to be in the `losc` directory (a link to the actual directory will do).
