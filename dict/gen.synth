@@ -1,9 +1,40 @@
 # gen.synth
 # languagetool POS generator
 
+# Chico --> chicazo
+NCMS000 --> NCMS00A
+-o +azo
+...
+
+# Chica --> chicaza
+NCFS000 --> NCFS00A
+-a +aza
+...
+
+# Chicos --> chicazos
+NCMP000 --> NCMP00A
+-os +azos
+...
+
+# Chicas --> chicazas
+NCFP000 --> NCFP00A
+-as +azas
+...
+
 # abolir --> abolición
 # abaratar --> abaratamiento
 VMN0000 --> NCFS000
 -r +ción
 -r +miento
+-r +da
+...
+
+# Anterior --> anteriormente
+AQ0CS0 --> RG
+- +mente
+...
+
+# Tranquila --> tranquilamente
+AQ0FS0 --> RG
+- +mente
 ...

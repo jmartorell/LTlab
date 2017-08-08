@@ -32,10 +32,13 @@ import codecs
 import time
 
 # source_cursor = conn.cursor()
-
+cmp_query ="""SELECT t.word, t.lemma, w.pedia, w.source, w.quote, w.news, w.books, w.versity, w.voyage,
+                             s.word AS spell, tags.word AS tags
+        FROM tmp_synth t LEFT JOIN wikicatalog w USING(word)
+        LEFT JOIN spell s USING(word)
+        LEFT JOIN tags USING (word)"""
 
 def production(conv, morph):
-
 
     gen_pos = conv[0]
     prod_pos = conv[1]
@@ -45,53 +48,57 @@ def production(conv, morph):
 
     src_cursor = src_conn.cursor()
     cmp_cursor = src_conn.cursor()
-    src_cursor.execute("CREATE TEMPORARY TABLE tmp_prod AS SELECT word, lemma FROM tags WHERE pos LIKE ?", [gen_pos])
+
+    cmp_cursor.execute("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_synth (word TEXT, lemma TEXT, pos TEXT)")
+    src_cursor.executescript("DROP TABLE IF EXISTS tmp_tags;")
+    src_cursor.execute("CREATE TEMPORARY TABLE tmp_tags AS SELECT word, lemma FROM tags WHERE pos LIKE ?", [gen_pos])
     src_conn.commit()
-    src_query = "SELECT word, lemma FROM tmp_prod"
+    src_query = "SELECT word, lemma FROM tmp_tags"
     for sfx in suffixes:
         start = time.time()
         gen_sfx = sfx[0]
         prod_sfx = sfx[1]
         if gen_sfx == "":
-            src_cursor.execute(src_query, gen_pos)
+            src_cursor.execute(src_query)
         else:
             src_cursor.execute(src_query + " WHERE word LIKE ?", ["%" + gen_sfx])
 
+        cmp_cursor.executescript("DELETE FROM tmp_synth;")
         for row in src_cursor:
             lemma = row[0]
-            word = row[0][:len(row[0]) - 2] + prod_sfx
-            spell = cmp_cursor.execute("SELECT count(word)FROM spell WHERE word = ?",
-                                       [word]).fetchone()[0]
-            lt = cmp_cursor.execute("SELECT count(word)FROM tags WHERE word = ?",
-                                    [word]).fetchone()[0]
-            cmp_cursor.execute("SELECT pedia, source, quote, news, books, versity, voyage FROM wikicatalog where word = ?", [word])
-            if cmp_cursor.rowcount > 0:
-                if cmp_cursor.rowcount > 1:
-                    print("Doble")
-                with cmp_cursor.fetchone() as comparison:
-                    pedia = comparison[0]
-                    source = comparison[1]
-                    quote = comparison[2]
-                    news = comparison[3]
-                    books = comparison[4]
-                    versity = comparison[5]
-                    voyage = comparison[6]
-            else:
-                pedia = 0
-                source = 0
-                quote = 0
-                news = 0
-                books = 0
-                versity = 0
-                voyage = 0
+            word = row[0][:len(row[0]) - len(gen_sfx)] + prod_sfx
+            cmp_cursor.execute("INSERT INTO tmp_synth VALUES (?,?,?)", [word, lemma, prod_pos])
 
-            if pedia + source + quote + news + books + versity + voyage +lt + spell:
+        src_conn.commit()
+
+        cmp_cursor.execute(cmp_query)
+
+        for comparison in cmp_cursor:
+            word = comparison[0]
+            lemma = comparison[1]
+            pedia = int(comparison[2] or 0)
+            source = int(comparison[3] or 0)
+            quote = int(comparison[4] or 0)
+            news = int(comparison[5] or 0)
+            books = int(comparison[6] or 0)
+            versity = int(comparison[7] or 0)
+            voyage = int(comparison[8] or 0)
+            spell = int(0 if comparison[9] is None else 1)
+            lt = int(0 if comparison[10] is None else 1)
+
+            # pedia = 0
+            # source = 0
+            # quote = 0
+            # news = 0
+            # books = 0
+            # versity = 0
+            # voyage = 0
+
+            if pedia + source + quote + news + books + versity + voyage +lt + spell > 1:
                 dst_conn.execute("INSERT INTO synth values(?,?,?,?,?,?,?,?,?,?,?,?)",
-                                [word, lemma, gen_pos, spell, lt, pedia, source, quote, news, books, versity, voyage])
-                print("+", word)
-            else:
-                print("·", word)
+                                [word, lemma, prod_pos, spell, lt, pedia, source, quote, news, books, versity, voyage])
 
+        # cmp_cursor.close()
         elapsed_time = time.time() - start
 
         print(sfx, int(elapsed_time) / 60, int(elapsed_time) % 60)
@@ -113,13 +120,16 @@ with codecs.open("gen.synth", "r", "UTF-8") as gen:
         if not (line[0] == "#" or line[0] == "\n"):
             if not conversion:
                 conversion = line.strip('\n').split(' --> ')
+                print(conversion)
             else:
                 tpl = line.strip('\n').split(' ')
                 if len(tpl) == 2:
                     morphemes.append(tpl)
-                elif line == "...":
+                    print(tpl)
+                elif line == "...\n":
                     production(conversion, morphemes)
-                print(tpl)
+                    conversion = []
+                    morphemes = []
                 # cursor.execute("INSERT INTO tags (word, lemma, pos) VALUES (?,?,?)", tpl)
                 # progress += 1
                 # if progress % 10000 == 0:
