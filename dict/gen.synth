@@ -1,0 +1,9 @@
+# gen.synth
+# languagetool POS generator
+
+# abolir --> abolición
+# abaratar --> abaratamiento
+VMN0000 --> NCFS000
+-r +ción
+-r +miento
+...
