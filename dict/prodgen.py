@@ -38,13 +38,21 @@ cmp_query ="""SELECT t.word, t.lemma, w.pedia, w.source, w.quote, w.news, w.book
         LEFT JOIN spell s USING(word)
         LEFT JOIN tags USING (word)"""
 
-def production(conv, morph):
 
-    gen_pos = conv[0]
-    prod_pos = conv[1]
+def is_weak_vowel(vowel):
+    return vowel in ("e", "i", "é", "í")
+
+
+def production(conv, morph, chk, ort):
+
+    chk_corpus = chk == "check"
+    gen_pos = conv[0]  # conv[i] holds generated pos for i
     suffixes = []
-    for sfx in morph:
-        suffixes.append([sfx[0][1:], sfx[1][1:]])
+    for trans in morph:
+        sfx_tpl = []
+        for sfx in trans:
+            sfx_tpl.append(sfx[1:])
+        suffixes.append(sfx_tpl)
 
     src_cursor = src_conn.cursor()
     cmp_cursor = src_conn.cursor()
@@ -57,17 +65,35 @@ def production(conv, morph):
     for sfx in suffixes:
         start = time.time()
         gen_sfx = sfx[0]
-        prod_sfx = sfx[1]
+
         if gen_sfx == "":
             src_cursor.execute(src_query)
         else:
             src_cursor.execute(src_query + " WHERE word LIKE ?", ["%" + gen_sfx])
 
         cmp_cursor.executescript("DELETE FROM tmp_synth;")
+        sfx_count = len(sfx)
         for row in src_cursor:
             lemma = row[0]
-            word = row[0][:len(row[0]) - len(gen_sfx)] + prod_sfx
-            cmp_cursor.execute("INSERT INTO tmp_synth VALUES (?,?,?)", [word, lemma, prod_pos])
+            for i in range(1, sfx_count):
+                prod_pos = conv[i]
+                prod_sfx = sfx[i]
+                root = row[0][:len(row[0]) - len(gen_sfx)]
+
+                if ort == "tonic":
+                    root = root.replace("á", "a")\
+                                .replace("é", "e")\
+                                .replace("í", "i")\
+                                .replace("ó", "o")\
+                                .replace("ú", "u")
+
+                if root.endswith("c") and is_weak_vowel(prod_sfx[0]):
+                    root = root[:len(root) - 1] + "qu"
+                if root.endswith("g") and is_weak_vowel(prod_sfx[0]):
+                    root = root[:len(root) - 1] + "gu"
+
+                word = root + prod_sfx
+                cmp_cursor.execute("INSERT INTO tmp_synth VALUES (?,?,?)", [word, lemma, prod_pos])
 
         src_conn.commit()
 
@@ -86,17 +112,9 @@ def production(conv, morph):
             spell = int(0 if comparison[9] is None else 1)
             lt = int(0 if comparison[10] is None else 1)
 
-            # pedia = 0
-            # source = 0
-            # quote = 0
-            # news = 0
-            # books = 0
-            # versity = 0
-            # voyage = 0
-
-            if pedia + source + quote + news + books + versity + voyage +lt + spell > 1:
+            if not chk_corpus or (pedia + source + quote + news + books + versity + voyage +lt + spell > 1):
                 dst_conn.execute("INSERT INTO synth values(?,?,?,?,?,?,?,?,?,?,?,?)",
-                                [word, lemma, prod_pos, spell, lt, pedia, source, quote, news, books, versity, voyage])
+                                 [word, lemma, prod_pos, spell, lt, pedia, source, quote, news, books, versity, voyage])
 
         # cmp_cursor.close()
         elapsed_time = time.time() - start
@@ -104,7 +122,7 @@ def production(conv, morph):
         print(sfx, int(elapsed_time) / 60, int(elapsed_time) % 60)
         dst_conn.commit()
 
-    print(gen_pos, "-->",  prod_pos)
+    print(gen_pos, "-->",  conv)
     src_cursor.close()
 
 src_conn = sqlite3.connect("dictionary.sqlite")
@@ -123,11 +141,13 @@ with codecs.open("gen.synth", "r", "UTF-8") as gen:
                 print(conversion)
             else:
                 tpl = line.strip('\n').split(' ')
-                if len(tpl) == 2:
+                if tpl[0][0] == "-":
                     morphemes.append(tpl)
                     print(tpl)
-                elif line == "...\n":
-                    production(conversion, morphemes)
+                elif tpl[0] == "...":
+                    check = tpl[1]
+                    orto = tpl[2]
+                    production(conversion, morphemes, check, orto)
                     conversion = []
                     morphemes = []
                 # cursor.execute("INSERT INTO tags (word, lemma, pos) VALUES (?,?,?)", tpl)

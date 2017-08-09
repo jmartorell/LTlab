@@ -1,40 +1,50 @@
 # gen.synth
 # languagetool POS generator
 
-# Chico --> chicazo
-NCMS000 --> NCMS00A
--o +azo
-...
+# Chico --> chicazo --> chicazos
+NCMS000 --> NCMS00A --> NCMP00A
+-o +azo +azos
+-o +ón +ones
+-n +nazo +nazos
+... pass tonic
 
-# Chica --> chicaza
-NCFS000 --> NCFS00A
--a +aza
-...
+# Chica --> chicaza --> chicazas
+NCFS000 --> NCFS00A --> NCFP00A
+-a +aza +azas
+... pass tonic
 
-# Chicos --> chicazos
-NCMP000 --> NCMP00A
--os +azos
-...
+# Chico --> chiquito --> chiquitos
+NCMS000 --> NCMS00D --> NCMP00D
+-o +ito +itos
+-o +ín +ines
+-o +illo +illos
+-n +nín +nitos
+-n +ncito +ncitos
+-e -ecito -ecitos
+-e -ecillo -ecillos
+... pass tonic
 
-# Chicas --> chicazas
-NCFP000 --> NCFP00A
--as +azas
-...
+# Chica --> chiquita --> chiquitas
+NCFS000 --> NCFS00D --> NCFP00D
+-a +ita +itas
+-a +ina +inas
+-a +illa +illas
+... pass tonic
 
 # abolir --> abolición
 # abaratar --> abaratamiento
-VMN0000 --> NCFS000
--r +ción
--r +miento
--r +da
-...
+VMN0000 --> NCFS000 --> NCFP000
+-r +ción +ciones
+-r +miento +mientos
+-r +da +das
+... check flat
 
 # Anterior --> anteriormente
 AQ0CS0 --> RG
 - +mente
-...
+... check flat
 
 # Tranquila --> tranquilamente
 AQ0FS0 --> RG
 - +mente
-...
+... check flat
