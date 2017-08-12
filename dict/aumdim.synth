@@ -1,0 +1,37 @@
+# aumdim.synth
+# languagetool POS generator
+# Augmentative and diminutive
+
+# Chico --> chicazo --> chicazos
+NCMS000 --> NCMS00A --> NCMP00A
+-o +azo +azos
+-o +ón +ones
+-n +nazo +nazos
+... pass tonic
+
+# Chica --> chicaza --> chicazas
+NCFS000 --> NCFS00A --> NCFP00A
+-a +aza +azas
+-e +aza +azas
+-n +naza +nazas
+... pass tonic
+
+# Chico --> chiquito --> chiquitos
+NCMS000 --> NCMS00D --> NCMP00D
+-o +ito +itos
+-o +ín +ines
+-o +illo +illos
+-n +nín +nitos
+-n +ncito +ncitos
+-e -ecito -ecitos
+-e -ecillo -ecillos
+... pass tonic
+
+# Chica --> chiquita --> chiquitas
+NCFS000 --> NCFS00D --> NCFP00D
+-a +ita +itas
+-a +ina +inas
+-a +illa +illas
+-e +ecita +ecitas
+-e +ecilla +ecillas
+... pass tonic

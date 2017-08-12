@@ -1,0 +1,14 @@
+# test.synth
+# languagetool POS generator for testing new constructions
+# Format: <Source pos> --> <destination pos> [--> <destination pos> ...]
+#         -<suffix substraction> +<suffix addition> [+<suffix addition> ...] (repeated)
+#         ... <check> <acute>
+#         <check> ::= pass | check
+#         <acute> ::= tonic | flat | check
+
+# atascando --> atascándome --> atascándote --> atascándolo --> atascándola --> atascándole --> atascándonos --> atascándoos --> atascándolos --> atascándolas --> atascándoles --> atascándose
+VMG0000 --> VMG0000+PP1CSA00 --> VMG0000+PP2CSA00 --> VMG0000+PP3MSA00 --> VMG0000+PP3FSA00 --> VMG0000+PP3CSD00 --> VMG0000+PP1CPA00 --> VMG0000+PP2CPA00 --> VMG0000+PP3MPA00 --> VMG0000+PP3FPA00 --> VMG0000+PP3CPD00 --> VMG0000+PP3CNO00
+-ando +ándome +ándote +ándolo +ándola +ándole +ándonos +ándoos +ándolos +ándolas +ándoles +ándose
+-endo +éndome +éndote +éndolo +éndola +éndole +éndonos +éndoos +éndolos +éndolas +éndoles +éndose
+-iendo +iéndome +iéndote +iéndolo +iéndola +iéndole +iéndonos +iéndoos +iéndolos +iéndolas +iéndoles +iéndose
+... pass tonic

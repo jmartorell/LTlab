@@ -30,9 +30,11 @@ source_query = """ SELECT """
 import sqlite3
 import codecs
 import time
+import sys
+import os
 
 # source_cursor = conn.cursor()
-cmp_query ="""SELECT t.word, t.lemma, w.pedia, w.source, w.quote, w.news, w.books, w.versity, w.voyage,
+cmp_query ="""SELECT DISTINCT t.word, t.lemma, t.pos, w.pedia, w.source, w.quote, w.news, w.books, w.versity, w.voyage,
                              s.word AS spell, tags.word AS tags
         FROM tmp_synth t LEFT JOIN wikicatalog w USING(word)
         LEFT JOIN spell s USING(word)
@@ -40,10 +42,11 @@ cmp_query ="""SELECT t.word, t.lemma, w.pedia, w.source, w.quote, w.news, w.book
 
 
 def is_weak_vowel(vowel):
+
     return vowel in ("e", "i", "é", "í")
 
 
-def production(conv, morph, chk, ort):
+def production(src_conn, dst_conn, conv, morph, chk, ort):
 
     chk_corpus = chk == "check"
     gen_pos = conv[0]  # conv[i] holds generated pos for i
@@ -74,7 +77,7 @@ def production(conv, morph, chk, ort):
         cmp_cursor.executescript("DELETE FROM tmp_synth;")
         sfx_count = len(sfx)
         for row in src_cursor:
-            lemma = row[0]
+            lemma = row[1]
             for i in range(1, sfx_count):
                 prod_pos = conv[i]
                 prod_sfx = sfx[i]
@@ -86,6 +89,17 @@ def production(conv, morph, chk, ort):
                                 .replace("í", "i")\
                                 .replace("ó", "o")\
                                 .replace("ú", "u")
+                # elif ort == "check": # incorrect: need search for last vowel
+                #     if root.endswith("a"):
+                #         root = root[:len(root) - 1] + "á"
+                #     elif root.endswith("e"):
+                #         root = root[:len(root) - 1] + "é"
+                #     elif root.endswith("i"):
+                #         root = root[:len(root) - 1] + "í"
+                #     elif root.endswith("o"):
+                #         root = root[:len(root) - 1] + "ó"
+                #     elif root.endswith("u"):
+                #         root = root[:len(root) - 1] + "ú"
 
                 if root.endswith("c") and is_weak_vowel(prod_sfx[0]):
                     root = root[:len(root) - 1] + "qu"
@@ -102,15 +116,16 @@ def production(conv, morph, chk, ort):
         for comparison in cmp_cursor:
             word = comparison[0]
             lemma = comparison[1]
-            pedia = int(comparison[2] or 0)
-            source = int(comparison[3] or 0)
-            quote = int(comparison[4] or 0)
-            news = int(comparison[5] or 0)
-            books = int(comparison[6] or 0)
-            versity = int(comparison[7] or 0)
-            voyage = int(comparison[8] or 0)
-            spell = int(0 if comparison[9] is None else 1)
-            lt = int(0 if comparison[10] is None else 1)
+            prod_pos = comparison[2]
+            pedia = int(comparison[3] or 0)
+            source = int(comparison[4] or 0)
+            quote = int(comparison[5] or 0)
+            news = int(comparison[6] or 0)
+            books = int(comparison[7] or 0)
+            versity = int(comparison[8] or 0)
+            voyage = int(comparison[9] or 0)
+            spell = int(0 if comparison[10] is None else 1)
+            lt = int(0 if comparison[11] is None else 1)
 
             if not chk_corpus or (pedia + source + quote + news + books + versity + voyage +lt + spell > 1):
                 dst_conn.execute("INSERT INTO synth values(?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -125,35 +140,59 @@ def production(conv, morph, chk, ort):
     print(gen_pos, "-->",  conv)
     src_cursor.close()
 
-src_conn = sqlite3.connect("dictionary.sqlite")
-dst_conn = sqlite3.connect("productions.sqlite")
 
-dst_conn.execute("DELETE from synth")
-dst_conn.commit()
+def file_base():
+    if len(sys.argv) == 1:
+        print ("Using default gen.synth file")
+        return "gen.synth"
+    elif len(sys.argv) == 2:
+        filename = sys.argv[1] + ".synth"
+        if not os.path.isfile(filename):
+            print("'%s': not found" % filename)
+            return 1
+        else:
+            return filename
+    else:
+        print("Usage: %s <synth.file> " % sys.argv[0])
+        return 12
 
-with codecs.open("gen.synth", "r", "UTF-8") as gen:
-    conversion = []
-    morphemes = []
-    for line in gen:
-        if not (line[0] == "#" or line[0] == "\n"):
-            if not conversion:
-                conversion = line.strip('\n').split(' --> ')
-                print(conversion)
-            else:
-                tpl = line.strip('\n').split(' ')
-                if tpl[0][0] == "-":
-                    morphemes.append(tpl)
-                    print(tpl)
-                elif tpl[0] == "...":
-                    check = tpl[1]
-                    orto = tpl[2]
-                    production(conversion, morphemes, check, orto)
-                    conversion = []
-                    morphemes = []
-                # cursor.execute("INSERT INTO tags (word, lemma, pos) VALUES (?,?,?)", tpl)
-                # progress += 1
-                # if progress % 10000 == 0:
-                #     pb.draw_progress_bar(progress / linecount, t)
-gen.close()
 
-print("EOF")
+def _main():
+    src_conn = sqlite3.connect("dictionary.sqlite")
+    dst_conn = sqlite3.connect("productions.sqlite")
+
+    dst_conn.execute("DELETE from synth")
+    dst_conn.commit()
+
+    synthfile = file_base()
+    if type(synthfile) is int:
+        exit(synthfile)
+
+    with codecs.open(synthfile, "r", "UTF-8") as gen:
+        conversion = []
+        morphemes = []
+        for line in gen:
+            if not (line[0] == "#" or line[0] == "\n"):
+                if not conversion:
+                    conversion = line.strip('\n').split(' --> ')
+                    print(conversion)
+                else:
+                    tpl = line.strip('\n').split(' ')
+                    if tpl[0][0] == "-":
+                        morphemes.append(tpl)
+                        print(tpl)
+                    elif tpl[0] == "...":
+                        check = tpl[1]
+                        orto = tpl[2]
+                        production(src_conn, dst_conn, conversion, morphemes, check, orto)
+                        conversion = []
+                        morphemes = []
+                    # cursor.execute("INSERT INTO tags (word, lemma, pos) VALUES (?,?,?)", tpl)
+                    # progress += 1
+                    # if progress % 10000 == 0:
+                    #     pb.draw_progress_bar(progress / linecount, t)
+        gen.close()
+
+    print("EOF")
+
+_main()
