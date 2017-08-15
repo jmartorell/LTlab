@@ -2,21 +2,21 @@
 # languagetool POS generator
 # Comparatives
 
-# lujo --> lujoso --> lujosos --> lujosa --> lujosas
-NCMS000 --> AQCMS0 --> AQCMP0 --> AQCFS0 --> AQCFP0
--o +oso +osos +osa +osas
--a +oso +osos +osa +osas
--r +roso +rosos +rosa +rosas
--e +oso +osos +osa +osas
--n +noso +nosos +nosa +nosas
+# lujo  --> lujoso --> lujosos --> lujosa --> lujosas
+NCMS000 --> AQCMS0 --> AQCMP0  --> AQCFS0 --> AQCFP0
+-o          +oso       +osos       +osa       +osas
+-a          +oso       +osos       +osa       +osas
+-r          +roso      +rosos      +rosa      +rosas
+-e          +oso       +osos       +osa       +osas
+-n          +noso      +nosos      +nosa      +nosas
 ... check tonic
 
 # izquierda --> izquierdoso --> izquierdosos --> izquierdosa --> izquierdosas
-NCFS000 --> AQCMS0 --> AQCMP0 --> AQCFS0 --> AQCFP0
--o +oso +osos +osa +osas
--a +oso +osos +osa +osas
--r +roso +rosos +rosa +rosas
--e +oso +osos +osa +osas
--n +noso +nosos +nosa +nosas
+NCFS000     --> AQCMS0      --> AQCMP0       --> AQCFS0      --> AQCFP0
+-o              +oso            +osos            +osa            +osas
+-a              +oso            +osos            +osa            +osas
+-r              +roso           +rosos           +rosa           +rosas
+-e              +oso            +osos            +osa            +osas
+-n              +noso           +nosos           +nosa           +nosas
 ... check tonic
 

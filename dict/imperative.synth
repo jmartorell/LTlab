@@ -1,0 +1,32 @@
+# imperative.synth
+# languagetool POS generator for testing new constructions
+# constructions from imperative
+
+# atasca --> atáscame         --> atáscate         --> atáscalo         --> atáscala         --> atáscale         --> atáscanos         --> atáscalos        --> atáscalas        --> atáscales
+VMM02S0  --> VMM02S0+PP1CSA00 --> VMM02S0+PP2CSA00 --> VMM02S0+PP3MSA00 --> VMM02S0+PP3FSA00 --> VMM02S0+PP3CSD00 --> VMM02S0+PP1CPA00  --> VMM02S0+PP3MPA00 --> VMM02S0+PP3FPA00 --> VMM02S0+PP3CPD00
+-            +me                  +te                  +lo                  +la                  +le                  +nos                  +los                 +las                 +les
+... pass forthtonic-1
+
+# atasca --> atáscamelo                --> atáscatelo                --> atáscaselo                --> atáscamela                --> atáscatela                --> atáscasela                --> atáscamelos               --> atáscatelos               --> atáscaselos               --> atáscamelas               --> atáscatelas               --> atáscaselas
+VMM02S0  --> VMM02S0+PP1CSA00+PP3MSA00 --> VMM02S0+PP2CSA00+PP3MSA00 --> VMM02S0+PP3MSA00+PP3MSA00 --> VMM02S0+PP1CSA00+PP3FSA00 --> VMM02S0+PP2CSA00+PP3CSD00 --> VMM02S0+PP3MSA00+PP3FSA00 --> VMM02S0+PP1CSA00+PP3MPA00 --> VMM02S0+PP2CSA00+PP3MPA00 --> VMM02S0+PP3MSA00+PP3MPA00 --> VMM02S0+PP1CSA00+PP3FPA00 --> VMM02S0+PP2CPA00+PP3CSD00 --> VMM02S0+PP3MSA00+PP3FPA00
+-            +melo                         +telo                         +selo                         +mela                         +tela                         +sela                         +melos                        +telos                        +selos                        +melas                        +telas                        +selas
+... pass forthtonic-2
+
+# atascad --> atascadme        --> atascadlo        --> atascadla        --> atascadle        --> atascadnos        --> atascadlos       --> atascadlas       --> atascadles
+VMM02P0   --> VMM02P0+PP1CSA00 --> VMM02P0+PP3MSA00 --> VMM02P0+PP3FSA00 --> VMM02P0+PP3CSD00 --> VMM02P0+PP1CPA00  --> VMM02P0+PP3MPA00 --> VMM02P0+PP3FPA00 --> VMM02P0+PP3CPD00
+-             +me                  +lo                  +la                  +le                  +nos                  +los                 +las                 +les
+... pass flat
+
+# atascad --> atascáos         --> atascáoslo                --> atascáosla                --> atascáoslos               --> atascáoslas
+VMM02P0   --> VMM02P0+PP2CSA00 --> VMM02P0+PP2CSA00+PP3MSA00 --> VMM02P0+PP2CSA00+PP3MSA00 --> VMM02P0+PP2CSA00+PP3MSA00 --> VMM02P0+PP2CSA00+PP3MSA00
+-ad           +áos                 +áoslo                        +áosla                        +áoslos                       +áoslas
+-ed           +éos                 +éoslo                        +éosla                        +éoslos                       +éoslas
+-id           +íos                 +íoslo                        +íosla                        +íoslos                       +íoslas
+... pass flat
+
+# atascad --> atascádmelo               --> atascádnoslo              --> atascádnosla              --> atascádselo               --> atascádmelos              --> atascádnoslos             --> atascádnoslas 
+VMM02P0   --> VMM02P0+PP1CSA00+PP3MSA00 --> VMM02P0+PP2CPA00+PP3MSA00 --> VMM02P0+PP2CPA00+PP3FSA00 --> VMM02P0+PP3FSA00+PP3FSA00 --> VMM02P0+PP3MSA00+PP3FPA00 --> VMM02P0+PP1CSA00+PP3MSA00 --> VMM02P0+PP2CPA00+PP3FPA00
+-ad           +ádmelo                       +ádnoslo                      +ádnosla                      +ádselo                       +ádmelos                      +ádnoslos                     +ádnoslas
+-ed           +édmelo                       +édnoslo                      +édnosla                      +édselo                       +édmelos                      +édnoslos                     +édnoslas
+-id           +ídmelo                       +ídnoslo                      +ídnosla                      +ídselo                       +ídmelos                      +ídnoslos                     +ídnoslas
+... pass flat

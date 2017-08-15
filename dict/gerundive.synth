@@ -1,49 +1,44 @@
 # gerundive.synth
 # like infinitive, pronominalization
-# Format: <Source pos> --> <destination pos> [--> <destination pos> ...]
-#         -<suffix substraction> +<suffix addition> [+<suffix addition> ...] (repeated)
-#         ... <check> <acute>
-#         <check> ::= pass | check
-#         <acute> ::= tonic | flat | check
 
-# atascando --> atascándome --> atascándote --> atascándolo --> atascándola --> atascándole --> atascándonos --> atascándoos --> atascándolos --> atascándolas --> atascándoles --> atascándose
-VMG0000 --> VMG0000+PP1CSA00 --> VMG0000+PP2CSA00 --> VMG0000+PP3MSA00 --> VMG0000+PP3FSA00 --> VMG0000+PP3CSD00 --> VMG0000+PP1CPA00 --> VMG0000+PP2CPA00 --> VMG0000+PP3MPA00 --> VMG0000+PP3FPA00 --> VMG0000+PP3CPD00 --> VMG0000+PP3CNO00
--ando +ándome +ándote +ándolo +ándola +ándole +ándonos +ándoos +ándolos +ándolas +ándoles +ándose
--endo +éndome +éndote +éndolo +éndola +éndole +éndonos +éndoos +éndolos +éndolas +éndoles +éndose
--iendo +iéndome +iéndote +iéndolo +iéndola +iéndole +iéndonos +iéndoos +iéndolos +iéndolas +iéndoles +iéndose
+# atascando --> atascándome      --> atascándote      --> atascándolo      --> atascándola      --> atascándole      --> atascándonos     --> atascándoos      --> atascándolos     --> atascándolas     --> atascándoles     --> atascándose
+VMG0000     --> VMG0000+PP1CSA00 --> VMG0000+PP2CSA00 --> VMG0000+PP3MSA00 --> VMG0000+PP3FSA00 --> VMG0000+PP3CSD00 --> VMG0000+PP1CPA00 --> VMG0000+PP2CPA00 --> VMG0000+PP3MPA00 --> VMG0000+PP3FPA00 --> VMG0000+PP3CPD00 --> VMG0000+PP3CNO00
+-ando           +ándome              +ándote              +ándolo              +ándola              +ándole              +ándonos             +ándoos              +ándolos             +ándolas             +ándoles             +ándose
+-endo           +éndome              +éndote              +éndolo              +éndola              +éndole              +éndonos             +éndoos              +éndolos             +éndolas             +éndoles             +éndose
+-iendo          +iéndome             +iéndote             +iéndolo             +iéndola             +iéndole             +iéndonos            +iéndoos             +iéndolos            +iéndolas            +iéndoles            +iéndose
 ... pass tonic
 
-# atascando --> atascándomelo --> atascándotelo --> atascándoselo --> atascándonoslo --> atascándooslo
-VMG0000 --> VMG0000+PP1CSA00+PP3MSA00 --> VMG0000+PP2CSA00+PP3MSA00 --> VMG0000+PP3CID00+PP3MSA00 --> VMG0000+PP1CPA00+PP3MSA00 --> VMG0000+PP2CPA00+PP3MSA00
--ando +ándomelo +ándotelo +ándoselo +ándonoslo +ándooslo
--endo +éndomelo +éndotelo +éndoselo +éndonoslo +éndooslo
--iendo +iéndomelo +iéndotelo +iéndoselo +iéndonoslo +iéndooslo
+# atascando --> atascándomelo             --> atascándotelo             --> atascándoselo             --> atascándonoslo            --> atascándooslo
+VMG0000     --> VMG0000+PP1CSA00+PP3MSA00 --> VMG0000+PP2CSA00+PP3MSA00 --> VMG0000+PP3CID00+PP3MSA00 --> VMG0000+PP1CPA00+PP3MSA00 --> VMG0000+PP2CPA00+PP3MSA00
+-ando           +ándomelo                     +ándotelo                     +ándoselo                     +ándonoslo                    +ándooslo
+-endo           +éndomelo                     +éndotelo                     +éndoselo                     +éndonoslo                    +éndooslo
+-iendo          +iéndomelo                    +iéndotelo                    +iéndoselo                    +iéndonoslo                   +iéndooslo
 ... pass flat
 
-# atascar --> atascándomelos --> atascándotelos --> atascándoselos --> atascándonoslos --> atascándooslos
-VMG0000 --> VMG0000+PP1CSA00+PP3MPA00 --> VMG0000+PP2CSA00+PP3MPA00 --> VMG0000+PP3CID00+PP3MPA00 --> VMG0000+PP1CPA00+PP3MPA00 --> VMG0000+PP2CPA00+PP3MPA00
--ando +ándomelos +ándotelos +ándoselos +ándonoslos +ándooslos
--endo +éndomelos +éndotelos +éndoselos +éndonoslos +éndooslos
--iendo +iéndomelos +iéndotelos +iéndoselos +iéndonoslos +iéndooslos
+# atascar --> atascándomelos            --> atascándotelos            --> atascándoselos            --> atascándonoslos           --> atascándooslos
+VMG0000   --> VMG0000+PP1CSA00+PP3MPA00 --> VMG0000+PP2CSA00+PP3MPA00 --> VMG0000+PP3CID00+PP3MPA00 --> VMG0000+PP1CPA00+PP3MPA00 --> VMG0000+PP2CPA00+PP3MPA00
+-ando         +ándomelos                    +ándotelos                    +ándoselos                    +ándonoslos                   +ándooslos
+-endo         +éndomelos                    +éndotelos                    +éndoselos                    +éndonoslos                   +éndooslos
+-iendo        +iéndomelos                   +iéndotelos                   +iéndoselos                   +iéndonoslos                  +iéndooslos
 ... pass flat
 
-# atascar --> atascándomela --> atascándotela --> atascándosela --> atascándonosla --> atascándoosla
-VMG0000 --> VMG0000+PP1CSA00+PP3FSA00 --> VMG0000+PP2CSA00+PP3FSA00 --> VMG0000+PP3CID00+PP3FSA00 --> VMG0000+PP1CPA00+PP3FSA00 --> VMG0000+PP2CPA00+PP3FSA00
--ando +ándomela +ándotela +ándosela +ándonosla +ándoosla
--endo +éndomela +éndotela +éndosela +éndonosla +éndoosla
--iendo +iéndomela +iéndotela +iéndosela +iéndonosla +iéndoosla
+# atascar --> atascándomela             --> atascándotela             --> atascándosela             --> atascándonosla            --> atascándoosla
+VMG0000   --> VMG0000+PP1CSA00+PP3FSA00 --> VMG0000+PP2CSA00+PP3FSA00 --> VMG0000+PP3CID00+PP3FSA00 --> VMG0000+PP1CPA00+PP3FSA00 --> VMG0000+PP2CPA00+PP3FSA00
+-ando         +ándomela                     +ándotela                     +ándosela                     +ándonosla                    +ándoosla
+-endo         +éndomela                     +éndotela                     +éndosela                     +éndonosla                    +éndoosla
+-iendo        +iéndomela                    +iéndotela                    +iéndosela                    +iéndonosla                   +iéndoosla
 ... pass flat
 
-# atascar --> atascándomelas --> atascándotelas --> atascándoselas --> atascándonoslas --> atascáándooslas
-VMG0000 --> VMG0000+PP1CSA00+PP3FPA00 --> VMG0000+PP2CSA00+PP3FPA00 --> VMG0000+PP3CID00+PP3FPA00 --> VMG0000+PP1CPA00+PP3FPA00 --> VMG0000+PP2CPA00+PP3FPA00
--ando +ándomelas +ándotelas +ándoselas +ándonoslas +ándooslas
--endo +éndomelas +éndotelas +éndoselas +éndonoslas +éndooslas
--iendo +iéndomelas +iéndotelas +iéndoselas +iéndonoslas +iéndooslas
+# atascar --> atascándomelas            --> atascándotelas            --> atascándoselas            --> atascándonoslas           --> atascáándooslas
+VMG0000   --> VMG0000+PP1CSA00+PP3FPA00 --> VMG0000+PP2CSA00+PP3FPA00 --> VMG0000+PP3CID00+PP3FPA00 --> VMG0000+PP1CPA00+PP3FPA00 --> VMG0000+PP2CPA00+PP3FPA00
+-ando         +ándomelas                    +ándotelas                    +ándoselas                    +ándonoslas                   +ándooslas
+-endo         +éndomelas                    +éndotelas                    +éndoselas                    +éndonoslas                   +éndooslas
+-iendo        +iéndomelas                   +iéndotelas                   +iéndoselas                   +iéndonoslas                  +iéndooslas
 ... pass flat
 
 # atascar --> atascándosele --> atascándoseles
 VMG0000 --> VMG0000+PP3CID00+PP3FSD00 --> VMG0000+PP3CID00+PP3FPD00
--ando +ándosele +ándoseles
--endo +éndosele +éndoseles
--iendo +iéndosele +iéndoseles
+-ando       +ándosele                     +ándoseles
+-endo       +éndosele                     +éndoseles
+-iendo      +iéndosele                    +iéndoseles
 ... pass flat

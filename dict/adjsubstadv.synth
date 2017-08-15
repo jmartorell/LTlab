@@ -5,29 +5,29 @@
 # abolir --> abolición --> aboliciones
 # abaratar --> abaratamiento --> abaratamientos
 # frenar --> frenada --> frenadas
-VMN0000 --> NCFS000 --> NCFP000
--r +ción +ciones
--r +miento +mientos
--r +da +das
+VMN0000  --> NCFS000 --> NCFP000
+-r           +ción       +ciones
+-r           +miento     +mientos
+-r           +da         +das
 ... check flat
 
 # calmando --> calmante --> calmante --> calmantes --> calmantes
-VMG0000 --> AQ0CS0 --> NCMS000 --> AQ0CP0 --> NCMP000
--do +te +te +tes +tes
+VMG0000    --> AQ0CS0   --> NCMS000  --> AQ0CP0    --> NCMP000
+-do            +te          +te          +tes          +tes
 ... pass flat
 
 # arrendado --> arrendador --> arrendadora --> arrendatario --> arrendataria --> arrendadores --> arrendadoras --> arrendatarios --> arrendatarias
-VMP00SM --> AQ0MS0 --> AQCFS0 --> AQ0MS0 --> AQCFS0 --> AQ0MP0 --> AQCFP0 --> AQ0MP0 --> AQCFP0 --> NCMS000 --> NCFS000 --> NCMS000 --> NCFS000 --> NCMP000 --> NCFP000 --> NCMP000 --> NCFP000
--do +dor +dora +tario +taria +dores +doras +tarios +tarias +dor +dora +tario +taria +dores +doras +tarios +tarias
+VMP00SM     --> AQ0MS0     --> AQCFS0      --> AQ0MS0       --> AQCFS0       --> AQ0MP0       --> AQCFP0       --> AQ0MP0        --> AQCFP0 --> NCMS000 --> NCFS000 --> NCMS000 --> NCFS000 --> NCMP000 --> NCFP000 --> NCMP000 --> NCFP000
+-do             +dor           +dora           +tario           +taria           +dores           +doras           +tarios           +tarias    +dor        +dora       +tario      +taria      +dores      +doras      +tarios     +tarias
 ... check tonic
 
 
 # Anterior --> anteriormente
-AQ0CS0 --> RG
-- +mente
+AQ0CS0     --> RG
+-              +mente
 ... check flat
 
 # Tranquila --> tranquilamente
-AQ0FS0 --> RG
-- +mente
+AQ0FS0      --> RG
+-               +mente
 ... check flat

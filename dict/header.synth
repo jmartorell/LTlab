@@ -1,12 +1,7 @@
-# test.synth
+# gen.synth
 # languagetool POS generator for testing new constructions
 # Format: <Source pos> --> <destination pos> [--> <destination pos> ...]
 #         -<suffix substraction> +<suffix addition> [+<suffix addition> ...] (repeated)
 #         ... <check> <acute>
 #         <check> ::= pass | check
 #         <acute> ::= tonic | flat | check | forthtonic-1 | forthtonic-2
-
-# Anterior --> anteriormente
-  AQ0_S0   --> RG
-	-		+mente
-... check flat

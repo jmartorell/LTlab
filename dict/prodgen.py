@@ -32,6 +32,7 @@ import codecs
 import time
 import sys
 import os
+import re
 
 # source_cursor = conn.cursor()
 cmp_query ="""SELECT DISTINCT t.word, t.lemma, t.pos, w.pedia, w.source, w.quote, w.news, w.books, w.versity, w.voyage,
@@ -40,10 +41,71 @@ cmp_query ="""SELECT DISTINCT t.word, t.lemma, t.pos, w.pedia, w.source, w.quote
         LEFT JOIN spell s USING(word)
         LEFT JOIN tags USING (word)"""
 
+re_vowel = re.compile("[aeiouáéíóúü]")
+re_vowel_flat = re.compile("[aeiouü]")
+re_vowel_accent = re.compile(".*[áéíóú].*")
+
 
 def is_weak_vowel(vowel):
 
     return vowel in ("e", "i", "é", "í")
+
+
+def acute(vowel):
+    if vowel == "a":
+        return "á"
+    elif vowel == "e":
+        return "é"
+    elif vowel == "i":
+        return "í"
+    elif vowel == "o":
+        return "ó"
+    elif vowel == "u":
+        return "ú"
+    else:
+        return "not vowel"
+
+
+def insert_acute(word, position):
+    if position == 0:
+        return acute(word[0]) + word[1:]
+    elif position == len(word) - 1:
+        return word[0:position] + acute(word[position])
+    else:
+        return word[0:position] + acute(word[position]) + word[position + 1:]
+
+
+def forthtonic(word, extras):
+    length = len(word)
+    count = int(extras)
+    # with an accented vowel, return untouched
+    if re_vowel_accent.match(word):
+        return word
+
+    serie = []
+    previous = False
+    total_vowels = 0
+    vowels = []
+    for i in range(0, length):
+        if re_vowel_flat.match(word[i]):
+            if previous and word[i] == "u":
+                serie.append(0)
+            else:
+                serie.append(1)
+                vowels.append(i)
+                total_vowels += 1
+        else:
+            serie.append(0)
+            previous = word[i] in ("q", "g")
+
+    vowels.reverse()
+    if total_vowels == 1:
+        if count == 1:
+            return word
+        elif count == 2:
+            return insert_acute(word, vowels[0])
+    elif total_vowels > 1:
+        return insert_acute(word, vowels[1])
 
 
 def production(src_conn, dst_conn, conv, morph, chk, ort):
@@ -60,9 +122,9 @@ def production(src_conn, dst_conn, conv, morph, chk, ort):
     src_cursor = src_conn.cursor()
     cmp_cursor = src_conn.cursor()
 
-    cmp_cursor.execute("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_synth (word TEXT, lemma TEXT, pos TEXT)")
+    cmp_cursor.execute("CREATE TABLE IF NOT EXISTS tmp_synth (word TEXT, lemma TEXT, pos TEXT)")  # TEMPORARY
     src_cursor.executescript("DROP TABLE IF EXISTS tmp_tags;")
-    src_cursor.execute("CREATE TEMPORARY TABLE tmp_tags AS SELECT word, lemma FROM tags WHERE pos LIKE ?", [gen_pos])
+    src_cursor.execute("CREATE TABLE tmp_tags AS SELECT word, lemma FROM tags WHERE pos LIKE ?", [gen_pos])  # TEMPORARY
     src_conn.commit()
     src_query = "SELECT word, lemma FROM tmp_tags"
     for sfx in suffixes:
@@ -78,33 +140,27 @@ def production(src_conn, dst_conn, conv, morph, chk, ort):
         sfx_count = len(sfx)
         for row in src_cursor:
             lemma = row[1]
+            root = row[0][:len(row[0]) - len(gen_sfx)]
+
+            if ort == "tonic":
+                root = root.replace("á", "a") \
+                    .replace("é", "e") \
+                    .replace("í", "i") \
+                    .replace("ó", "o") \
+                    .replace("ú", "u")
+            elif ort[0:10] == "forthtonic":
+                root = forthtonic(root, ort[11])
+
             for i in range(1, sfx_count):
                 prod_pos = conv[i]
                 prod_sfx = sfx[i]
-                root = row[0][:len(row[0]) - len(gen_sfx)]
-
-                if ort == "tonic":
-                    root = root.replace("á", "a")\
-                                .replace("é", "e")\
-                                .replace("í", "i")\
-                                .replace("ó", "o")\
-                                .replace("ú", "u")
-                # elif ort == "check": # incorrect: need search for last vowel
-                #     if root.endswith("a"):
-                #         root = root[:len(root) - 1] + "á"
-                #     elif root.endswith("e"):
-                #         root = root[:len(root) - 1] + "é"
-                #     elif root.endswith("i"):
-                #         root = root[:len(root) - 1] + "í"
-                #     elif root.endswith("o"):
-                #         root = root[:len(root) - 1] + "ó"
-                #     elif root.endswith("u"):
-                #         root = root[:len(root) - 1] + "ú"
 
                 if root.endswith("c") and is_weak_vowel(prod_sfx[0]):
                     root = root[:len(root) - 1] + "qu"
-                if root.endswith("g") and is_weak_vowel(prod_sfx[0]):
+                elif root.endswith("g") and is_weak_vowel(prod_sfx[0]):
                     root = root[:len(root) - 1] + "gu"
+                elif root.endswith("z") and is_weak_vowel(prod_sfx[0]):
+                    root = root[:len(root) - 1] + "c"
 
                 word = root + prod_sfx
                 cmp_cursor.execute("INSERT INTO tmp_synth VALUES (?,?,?)", [word, lemma, prod_pos])
@@ -172,12 +228,13 @@ def _main():
         conversion = []
         morphemes = []
         for line in gen:
-            if not (line[0] == "#" or line[0] == "\n"):
+            line = re.sub('\s+', " ", line.strip(" \t\n\r"))
+            if line != "" and not line[0] == "#":
                 if not conversion:
-                    conversion = line.strip('\n').split(' --> ')
+                    conversion = line.split(' --> ')
                     print(conversion)
                 else:
-                    tpl = line.strip('\n').split(' ')
+                    tpl = line.split(' ')
                     if tpl[0][0] == "-":
                         morphemes.append(tpl)
                         print(tpl)

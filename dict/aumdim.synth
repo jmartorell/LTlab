@@ -1,37 +1,57 @@
 # aumdim.synth
 # languagetool POS generator
-# Augmentative and diminutive
+# Augmentatives and diminutives
 
 # Chico --> chicazo --> chicazos
 NCMS000 --> NCMS00A --> NCMP00A
 -o +azo +azos
--o +ón +ones
--n +nazo +nazos
+-o +ón  +ones
+-a +azo +azos
+-a +ón  +ones
+-e +azo +azos
+-e +ón  +ones
+-i +azo +azos
+-i +ón  +ones
 ... pass tonic
+
+# canal --> canalazo --> canalazos
+NCMS000 --> NCMS00A --> NCMP00A
+- +azo +azos
+- +ón  +ones
+... check tonic
 
 # Chica --> chicaza --> chicazas
 NCFS000 --> NCFS00A --> NCFP00A
--a +aza +azas
--e +aza +azas
+-a +aza  +azas
+-e +aza  +azas
 -n +naza +nazas
 ... pass tonic
 
 # Chico --> chiquito --> chiquitos
 NCMS000 --> NCMS00D --> NCMP00D
--o +ito +itos
--o +ín +ines
+-o +ito  +itos
+-o +ín   +ines
 -o +illo +illos
--n +nín +nitos
--n +ncito +ncitos
--e -ecito -ecitos
--e -ecillo -ecillos
+-n +nín  +nitos
 ... pass tonic
+
+# alud --> aludito --> aluditos
+NCMS000 --> NCMS00D --> NCMP00D
+- +ito      +itos
+- +illo     +illos
+- +ín       +ines
+... check tonic
+
+# editorial --> editorialita --> editorialitas
+NCFS000 --> NCFS00D --> NCFP00D
+- +ita  +itas
+- +illa +illas
+- +ina  +inas
+... check tonic
 
 # Chica --> chiquita --> chiquitas
 NCFS000 --> NCFS00D --> NCFP00D
--a +ita +itas
--a +ina +inas
+-a +ita  +itas
+-a +ina  +inas
 -a +illa +illas
--e +ecita +ecitas
--e +ecilla +ecillas
 ... pass tonic

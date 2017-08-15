@@ -4,167 +4,235 @@
 #         -<suffix substraction> +<suffix addition> [+<suffix addition> ...] (repeated)
 #         ... <check> <acute>
 #         <check> ::= pass | check
-#         <acute> ::= tonic | flat | check
-
+#         <acute> ::= tonic | flat | check | forthtonic-1 | forthtonic-2
+# adjsubstadv.synth
+# languagetool POS generator
+# Adjetive adverbalization and verb substantivation
 
 # abolir --> abolición --> aboliciones
 # abaratar --> abaratamiento --> abaratamientos
 # frenar --> frenada --> frenadas
-VMN0000 --> NCFS000 --> NCFP000
--r +ción +ciones
--r +miento +mientos
--r +da +das
+VMN0000  --> NCFS000 --> NCFP000
+-r           +ción       +ciones
+-r           +miento     +mientos
+-r           +da         +das
 ... check flat
 
 # calmando --> calmante --> calmante --> calmantes --> calmantes
-VMG0000 --> AQ0CS0 --> NCMS000 --> AQ0CP0 --> NCMP000
--do +te +te +tes +tes
+VMG0000    --> AQ0CS0   --> NCMS000  --> AQ0CP0    --> NCMP000
+-do            +te          +te          +tes          +tes
 ... pass flat
 
+# arrendado --> arrendador --> arrendadora --> arrendatario --> arrendataria --> arrendadores --> arrendadoras --> arrendatarios --> arrendatarias
+VMP00SM     --> AQ0MS0     --> AQCFS0      --> AQ0MS0       --> AQCFS0       --> AQ0MP0       --> AQCFP0       --> AQ0MP0        --> AQCFP0 --> NCMS000 --> NCFS000 --> NCMS000 --> NCFS000 --> NCMP000 --> NCFP000 --> NCMP000 --> NCFP000
+-do             +dor           +dora           +tario           +taria           +dores           +doras           +tarios           +tarias    +dor        +dora       +tario      +taria      +dores      +doras      +tarios     +tarias
+... check tonic
+
+
 # Anterior --> anteriormente
-AQ0CS0 --> RG
-- +mente
+AQ0CS0     --> RG
+-              +mente
 ... check flat
 
 # Tranquila --> tranquilamente
-AQ0FS0 --> RG
-- +mente
+AQ0FS0      --> RG
+-               +mente
 ... check flat
-
 # aumdim.synth
 # languagetool POS generator
-# Augmentative and diminutive
+# Augmentatives and diminutives
 
 # Chico --> chicazo --> chicazos
 NCMS000 --> NCMS00A --> NCMP00A
 -o +azo +azos
--o +ón +ones
--n +nazo +nazos
+-o +ón  +ones
+-a +azo +azos
+-a +ón  +ones
+-e +azo +azos
+-e +ón  +ones
+-i +azo +azos
+-i +ón  +ones
 ... pass tonic
+
+# canal --> canalazo --> canalazos
+NCMS000 --> NCMS00A --> NCMP00A
+- +azo +azos
+- +ón  +ones
+... check tonic
 
 # Chica --> chicaza --> chicazas
 NCFS000 --> NCFS00A --> NCFP00A
--a +aza +azas
--e +aza +azas
+-a +aza  +azas
+-e +aza  +azas
 -n +naza +nazas
 ... pass tonic
 
 # Chico --> chiquito --> chiquitos
 NCMS000 --> NCMS00D --> NCMP00D
--o +ito +itos
--o +ín +ines
+-o +ito  +itos
+-o +ín   +ines
 -o +illo +illos
--n +nín +nitos
--n +ncito +ncitos
--e -ecito -ecitos
--e -ecillo -ecillos
+-n +nín  +nitos
 ... pass tonic
+
+# alud --> aludito --> aluditos
+NCMS000 --> NCMS00D --> NCMP00D
+- +ito      +itos
+- +illo     +illos
+- +ín       +ines
+... check tonic
+
+# editorial --> editorialita --> editorialitas
+NCFS000 --> NCFS00D --> NCFP00D
+- +ita  +itas
+- +illa +illas
+- +ina  +inas
+... check tonic
 
 # Chica --> chiquita --> chiquitas
 NCFS000 --> NCFS00D --> NCFP00D
--a +ita +itas
--a +ina +inas
+-a +ita  +itas
+-a +ina  +inas
 -a +illa +illas
--e +ecita +ecitas
--e +ecilla +ecillas
 ... pass tonic
+# aumdim.synth
+# languagetool POS generator
+# Comparatives
 
-# lujo --> lujoso --> lujosos --> lujosa --> lujosas
-NCMS000 --> AQCMS0 --> AQCMP0 --> AQCFS0 --> AQCFP0
--o +oso +osos +osa +osas
--a +oso +osos +osa +osas
--r +roso +rosos +rosa +rosas
--e +oso +osos +osa +osas
--n +noso +nosos +nosa +nosas
+# lujo  --> lujoso --> lujosos --> lujosa --> lujosas
+NCMS000 --> AQCMS0 --> AQCMP0  --> AQCFS0 --> AQCFP0
+-o          +oso       +osos       +osa       +osas
+-a          +oso       +osos       +osa       +osas
+-r          +roso      +rosos      +rosa      +rosas
+-e          +oso       +osos       +osa       +osas
+-n          +noso      +nosos      +nosa      +nosas
 ... check tonic
 
 # izquierda --> izquierdoso --> izquierdosos --> izquierdosa --> izquierdosas
-NCFS000 --> AQCMS0 --> AQCMP0 --> AQCFS0 --> AQCFP0
--o +oso +osos +osa +osas
--a +oso +osos +osa +osas
--r +roso +rosos +rosa +rosas
--e +oso +osos +osa +osas
--n +noso +nosos +nosa +nosas
+NCFS000     --> AQCMS0      --> AQCMP0       --> AQCFS0      --> AQCFP0
+-o              +oso            +osos            +osa            +osas
+-a              +oso            +osos            +osa            +osas
+-r              +roso           +rosos           +rosa           +rosas
+-e              +oso            +osos            +osa            +osas
+-n              +noso           +nosos           +nosa           +nosas
 ... check tonic
 
-# atascar --> atascarme --> atascarte --> atascarlo --> atascarla --> atascarle --> atascarnos --> atascaros --> atascarlos --> atascarlas --> atascarles --> atascarse
-VMN0000 --> VMN0000+PP1CSA00 --> VMN0000+PP2CSA00 --> VMN0000+PP3MSA00 --> VMN0000+PP3FSA00 --> VMN0000+PP3CSD00 --> VMN0000+PP1CPA00 --> VMN0000+PP2CPA00 --> VMN0000+PP3MPA00 --> VMN0000+PP3FPA00 --> VMN0000+PP3CPD00 --> VMN0000+PP3CNO00
-- +me +te +lo +la +le +nos +os +los +las +les +se
+# gerundive.synth
+# like infinitive, pronominalization
+
+# atascando --> atascándome      --> atascándote      --> atascándolo      --> atascándola      --> atascándole      --> atascándonos     --> atascándoos      --> atascándolos     --> atascándolas     --> atascándoles     --> atascándose
+VMG0000     --> VMG0000+PP1CSA00 --> VMG0000+PP2CSA00 --> VMG0000+PP3MSA00 --> VMG0000+PP3FSA00 --> VMG0000+PP3CSD00 --> VMG0000+PP1CPA00 --> VMG0000+PP2CPA00 --> VMG0000+PP3MPA00 --> VMG0000+PP3FPA00 --> VMG0000+PP3CPD00 --> VMG0000+PP3CNO00
+-ando           +ándome              +ándote              +ándolo              +ándola              +ándole              +ándonos             +ándoos              +ándolos             +ándolas             +ándoles             +ándose
+-endo           +éndome              +éndote              +éndolo              +éndola              +éndole              +éndonos             +éndoos              +éndolos             +éndolas             +éndoles             +éndose
+-iendo          +iéndome             +iéndote             +iéndolo             +iéndola             +iéndole             +iéndonos            +iéndoos             +iéndolos            +iéndolas            +iéndoles            +iéndose
 ... pass tonic
 
-# atascar --> atascármelo --> atascártelo --> atascárselo --> atascárnoslo --> atascároslo
-VMN0000 --> VMN0000+PP1CSA00+PP3MSA00 --> VMN0000+PP2CSA00+PP3MSA00 --> VMN0000+PP3CID00+PP3MSA00 --> VMN0000+PP1CPA00+PP3MSA00 --> VMN0000+PP2CPA00+PP3MSA00
--ar +ármelo +ártelo +árselo +árnoslo +ároslo
--er +érmelo +értelo +érselo +érnoslo +éroslo
--ir +írmelo +írtelo +írselo +írnoslo +íroslo
+# atascando --> atascándomelo             --> atascándotelo             --> atascándoselo             --> atascándonoslo            --> atascándooslo
+VMG0000     --> VMG0000+PP1CSA00+PP3MSA00 --> VMG0000+PP2CSA00+PP3MSA00 --> VMG0000+PP3CID00+PP3MSA00 --> VMG0000+PP1CPA00+PP3MSA00 --> VMG0000+PP2CPA00+PP3MSA00
+-ando           +ándomelo                     +ándotelo                     +ándoselo                     +ándonoslo                    +ándooslo
+-endo           +éndomelo                     +éndotelo                     +éndoselo                     +éndonoslo                    +éndooslo
+-iendo          +iéndomelo                    +iéndotelo                    +iéndoselo                    +iéndonoslo                   +iéndooslo
 ... pass flat
 
-# atascar --> atascármelos --> atascártelos --> atascárselos --> atascárnoslos --> atascároslos
-VMN0000 --> VMN0000+PP1CSA00+PP3MPA00 --> VMN0000+PP2CSA00+PP3MPA00 --> VMN0000+PP3CID00+PP3MPA00 --> VMN0000+PP1CPA00+PP3MPA00 --> VMN0000+PP2CPA00+PP3MPA00
--ar +ármelos +ártelos +árselos +árnoslos +ároslos
--er +érmelos +értelos +érselos +érnoslos +éroslos
--ir +írmelos +írtelos +írselos +írnoslos +íroslos
+# atascar --> atascándomelos            --> atascándotelos            --> atascándoselos            --> atascándonoslos           --> atascándooslos
+VMG0000   --> VMG0000+PP1CSA00+PP3MPA00 --> VMG0000+PP2CSA00+PP3MPA00 --> VMG0000+PP3CID00+PP3MPA00 --> VMG0000+PP1CPA00+PP3MPA00 --> VMG0000+PP2CPA00+PP3MPA00
+-ando         +ándomelos                    +ándotelos                    +ándoselos                    +ándonoslos                   +ándooslos
+-endo         +éndomelos                    +éndotelos                    +éndoselos                    +éndonoslos                   +éndooslos
+-iendo        +iéndomelos                   +iéndotelos                   +iéndoselos                   +iéndonoslos                  +iéndooslos
 ... pass flat
 
-# atascar --> atascármela --> atascártela --> atascársela --> atascárnosla --> atascárosla
-VMN0000 --> VMN0000+PP1CSA00+PP3FSA00 --> VMN0000+PP2CSA00+PP3FSA00 --> VMN0000+PP3CID00+PP3FSA00 --> VMN0000+PP1CPA00+PP3FSA00 --> VMN0000+PP2CPA00+PP3FSA00
--ar +ármela +ártela +ársela +árnosla +árosla
--er +érmela +értela +érsela +érnosla +érosla
--ir +írmela +írtela +írsela +írnosla +írosla
+# atascar --> atascándomela             --> atascándotela             --> atascándosela             --> atascándonosla            --> atascándoosla
+VMG0000   --> VMG0000+PP1CSA00+PP3FSA00 --> VMG0000+PP2CSA00+PP3FSA00 --> VMG0000+PP3CID00+PP3FSA00 --> VMG0000+PP1CPA00+PP3FSA00 --> VMG0000+PP2CPA00+PP3FSA00
+-ando         +ándomela                     +ándotela                     +ándosela                     +ándonosla                    +ándoosla
+-endo         +éndomela                     +éndotela                     +éndosela                     +éndonosla                    +éndoosla
+-iendo        +iéndomela                    +iéndotela                    +iéndosela                    +iéndonosla                   +iéndoosla
 ... pass flat
 
-# atascar --> atascármelas --> atascártelas --> atascárselas --> atascárnoslas --> atascároslas
-VMN0000 --> VMN0000+PP1CSA00+PP3FPA00 --> VMN0000+PP2CSA00+PP3FPA00 --> VMN0000+PP3CID00+PP3FPA00 --> VMN0000+PP1CPA00+PP3FPA00 --> VMN0000+PP2CPA00+PP3FPA00
--ar +ármelas +ártelas +árselas +árnoslas +ároslas
--er +érmelas +értelas +érselas +érnoslas +éroslas
--ir +írmelas +írtelas +írselas +írnoslas +íroslas
-... pass flat
-
-# atascar --> atascársele --> atascárseles
-VMN0000 --> VMN0000+PP3CID00+PP3FSD00 --> VMN0000+PP3CID00+PP3FPD00
--ar +ársele +árseles
--er +érsele +érseles
--ir +írsele +írseles
-... pass flat
-
-# atascando --> atascándome --> atascándote --> atascándolo --> atascándola --> atascándole --> atascándonos --> atascándoos --> atascándolos --> atascándolas --> atascándoles --> atascándose
-VMG0000 --> VMG0000+PP1CSA00 --> VMG0000+PP2CSA00 --> VMG0000+PP3MSA00 --> VMG0000+PP3FSA00 --> VMG0000+PP3CSD00 --> VMG0000+PP1CPA00 --> VMG0000+PP2CPA00 --> VMG0000+PP3MPA00 --> VMG0000+PP3FPA00 --> VMG0000+PP3CPD00 --> VMG0000+PP3CNO00
--ando +ándome +ándote +ándolo +ándola +ándole +ándonos +ándoos +ándolos +ándolas +ándoles +ándose
--endo +éndome +éndote +éndolo +éndola +éndole +éndonos +éndoos +éndolos +éndolas +éndoles +éndose
--iendo +iéndome +iéndote +iéndolo +iéndola +iéndole +iéndonos +iéndoos +iéndolos +iéndolas +iéndoles +iéndose
-... pass tonic
-
-# atascando --> atascándomelo --> atascándotelo --> atascándoselo --> atascándonoslo --> atascándooslo
-VMG0000 --> VMG0000+PP1CSA00+PP3MSA00 --> VMG0000+PP2CSA00+PP3MSA00 --> VMG0000+PP3CID00+PP3MSA00 --> VMG0000+PP1CPA00+PP3MSA00 --> VMG0000+PP2CPA00+PP3MSA00
--ando +ándomelo +ándotelo +ándoselo +ándonoslo +ándooslo
--endo +éndomelo +éndotelo +éndoselo +éndonoslo +éndooslo
--iendo +iéndomelo +iéndotelo +iéndoselo +iéndonoslo +iéndooslo
-... pass flat
-
-# atascar --> atascándomelos --> atascándotelos --> atascándoselos --> atascándonoslos --> atascándooslos
-VMG0000 --> VMG0000+PP1CSA00+PP3MPA00 --> VMG0000+PP2CSA00+PP3MPA00 --> VMG0000+PP3CID00+PP3MPA00 --> VMG0000+PP1CPA00+PP3MPA00 --> VMG0000+PP2CPA00+PP3MPA00
--ando +ándomelos +ándotelos +ándoselos +ándonoslos +ándooslos
--endo +éndomelos +éndotelos +éndoselos +éndonoslos +éndooslos
--iendo +iéndomelos +iéndotelos +iéndoselos +iéndonoslos +iéndooslos
-... pass flat
-
-# atascar --> atascándomela --> atascándotela --> atascándosela --> atascándonosla --> atascándoosla
-VMG0000 --> VMG0000+PP1CSA00+PP3FSA00 --> VMG0000+PP2CSA00+PP3FSA00 --> VMG0000+PP3CID00+PP3FSA00 --> VMG0000+PP1CPA00+PP3FSA00 --> VMG0000+PP2CPA00+PP3FSA00
--ando +ándomela +ándotela +ándosela +ándonosla +ándoosla
--endo +éndomela +éndotela +éndosela +éndonosla +éndoosla
--iendo +iéndomela +iéndotela +iéndosela +iéndonosla +iéndoosla
-... pass flat
-
-# atascar --> atascándomelas --> atascándotelas --> atascándoselas --> atascándonoslas --> atascáándooslas
-VMG0000 --> VMG0000+PP1CSA00+PP3FPA00 --> VMG0000+PP2CSA00+PP3FPA00 --> VMG0000+PP3CID00+PP3FPA00 --> VMG0000+PP1CPA00+PP3FPA00 --> VMG0000+PP2CPA00+PP3FPA00
--ando +ándomelas +ándotelas +ándoselas +ándonoslas +ándooslas
--endo +éndomelas +éndotelas +éndoselas +éndonoslas +éndooslas
--iendo +iéndomelas +iéndotelas +iéndoselas +iéndonoslas +iéndooslas
+# atascar --> atascándomelas            --> atascándotelas            --> atascándoselas            --> atascándonoslas           --> atascáándooslas
+VMG0000   --> VMG0000+PP1CSA00+PP3FPA00 --> VMG0000+PP2CSA00+PP3FPA00 --> VMG0000+PP3CID00+PP3FPA00 --> VMG0000+PP1CPA00+PP3FPA00 --> VMG0000+PP2CPA00+PP3FPA00
+-ando         +ándomelas                    +ándotelas                    +ándoselas                    +ándonoslas                   +ándooslas
+-endo         +éndomelas                    +éndotelas                    +éndoselas                    +éndonoslas                   +éndooslas
+-iendo        +iéndomelas                   +iéndotelas                   +iéndoselas                   +iéndonoslas                  +iéndooslas
 ... pass flat
 
 # atascar --> atascándosele --> atascándoseles
 VMG0000 --> VMG0000+PP3CID00+PP3FSD00 --> VMG0000+PP3CID00+PP3FPD00
--ando +ándosele +ándoseles
--endo +éndosele +éndoseles
--iendo +iéndosele +iéndoseles
+-ando       +ándosele                     +ándoseles
+-endo       +éndosele                     +éndoseles
+-iendo      +iéndosele                    +iéndoseles
+... pass flat
+# imperative.synth
+# languagetool POS generator for testing new constructions
+# constructions from imperative
+
+# atasca --> atáscame         --> atáscate         --> atáscalo         --> atáscala         --> atáscale         --> atáscanos         --> atáscalos        --> atáscalas        --> atáscales
+VMM02S0  --> VMM02S0+PP1CSA00 --> VMM02S0+PP2CSA00 --> VMM02S0+PP3MSA00 --> VMM02S0+PP3FSA00 --> VMM02S0+PP3CSD00 --> VMM02S0+PP1CPA00  --> VMM02S0+PP3MPA00 --> VMM02S0+PP3FPA00 --> VMM02S0+PP3CPD00
+-            +me                  +te                  +lo                  +la                  +le                  +nos                  +los                 +las                 +les
+... pass forthtonic-1
+
+# atasca --> atáscamelo                --> atáscatelo                --> atáscaselo                --> atáscamela                --> atáscatela                --> atáscasela                --> atáscamelos               --> atáscatelos               --> atáscaselos               --> atáscamelas               --> atáscatelas               --> atáscaselas
+VMM02S0  --> VMM02S0+PP1CSA00+PP3MSA00 --> VMM02S0+PP2CSA00+PP3MSA00 --> VMM02S0+PP3MSA00+PP3MSA00 --> VMM02S0+PP1CSA00+PP3FSA00 --> VMM02S0+PP2CSA00+PP3CSD00 --> VMM02S0+PP3MSA00+PP3FSA00 --> VMM02S0+PP1CSA00+PP3MPA00 --> VMM02S0+PP2CSA00+PP3MPA00 --> VMM02S0+PP3MSA00+PP3MPA00 --> VMM02S0+PP1CSA00+PP3FPA00 --> VMM02S0+PP2CPA00+PP3CSD00 --> VMM02S0+PP3MSA00+PP3FPA00
+-            +melo                         +telo                         +selo                         +mela                         +tela                         +sela                         +melos                        +telos                        +selos                        +melas                        +telas                        +selas
+... pass forthtonic-2
+
+# atascad --> atascadme        --> atascadlo        --> atascadla        --> atascadle        --> atascadnos        --> atascadlos       --> atascadlas       --> atascadles
+VMM02P0   --> VMM02P0+PP1CSA00 --> VMM02P0+PP3MSA00 --> VMM02P0+PP3FSA00 --> VMM02P0+PP3CSD00 --> VMM02P0+PP1CPA00  --> VMM02P0+PP3MPA00 --> VMM02P0+PP3FPA00 --> VMM02P0+PP3CPD00
+-             +me                  +lo                  +la                  +le                  +nos                  +los                 +las                 +les
+... pass flat
+
+# atascad --> atascáos         --> atascáoslo                --> atascáosla                --> atascáoslos               --> atascáoslas
+VMM02P0   --> VMM02P0+PP2CSA00 --> VMM02P0+PP2CSA00+PP3MSA00 --> VMM02P0+PP2CSA00+PP3MSA00 --> VMM02P0+PP2CSA00+PP3MSA00 --> VMM02P0+PP2CSA00+PP3MSA00
+-ad           +áos                 +áoslo                        +áosla                        +áoslos                       +áoslas
+-ed           +éos                 +éoslo                        +éosla                        +éoslos                       +éoslas
+-id           +íos                 +íoslo                        +íosla                        +íoslos                       +íoslas
+... pass flat
+
+# atascad --> atascádmelo               --> atascádnoslo              --> atascádnosla              --> atascádselo               --> atascádmelos              --> atascádnoslos             --> atascádnoslas 
+VMM02P0   --> VMM02P0+PP1CSA00+PP3MSA00 --> VMM02P0+PP2CPA00+PP3MSA00 --> VMM02P0+PP2CPA00+PP3FSA00 --> VMM02P0+PP3FSA00+PP3FSA00 --> VMM02P0+PP3MSA00+PP3FPA00 --> VMM02P0+PP1CSA00+PP3MSA00 --> VMM02P0+PP2CPA00+PP3FPA00
+-ad           +ádmelo                       +ádnoslo                      +ádnosla                      +ádselo                       +ádmelos                      +ádnoslos                     +ádnoslas
+-ed           +édmelo                       +édnoslo                      +édnosla                      +édselo                       +édmelos                      +édnoslos                     +édnoslas
+-id           +ídmelo                       +ídnoslo                      +ídnosla                      +ídselo                       +ídmelos                      +ídnoslos                     +ídnoslas
+... pass flat
+# infinitive.synth
+# languagetool POS generator for testing new constructions
+# pronominal infinitives.
+
+# atascar --> atascarme        --> atascarte        --> atascarlo        --> atascarla        --> atascarle        --> atascarnos       --> atascaros        --> atascarlos       --> atascarlas       --> atascarles       --> atascarse
+VMN0000   --> VMN0000+PP1CSA00 --> VMN0000+PP2CSA00 --> VMN0000+PP3MSA00 --> VMN0000+PP3FSA00 --> VMN0000+PP3CSD00 --> VMN0000+PP1CPA00 --> VMN0000+PP2CPA00 --> VMN0000+PP3MPA00 --> VMN0000+PP3FPA00 --> VMN0000+PP3CPD00 --> VMN0000+PP3CNO00
+-             +me                  +te                  +lo                  +la                  +le                  +nos                 +os                  +los                 +las                 +les                 +se
+... pass tonic
+
+# atascar --> atascármelo               --> atascártelo               --> atascárselo               --> atascárnoslo              --> atascároslo
+VMN0000   --> VMN0000+PP1CSA00+PP3MSA00 --> VMN0000+PP2CSA00+PP3MSA00 --> VMN0000+PP3CID00+PP3MSA00 --> VMN0000+PP1CPA00+PP3MSA00 --> VMN0000+PP2CPA00+PP3MSA00
+-ar           +ármelo                       +ártelo                       +árselo                       +árnoslo                      +ároslo
+-er           +érmelo                       +értelo                       +érselo                       +érnoslo                      +éroslo
+-ir           +írmelo                       +írtelo                       +írselo                       +írnoslo                      +íroslo
+... pass flat
+
+# atascar --> atascármelos              --> atascártelos              --> atascárselos              --> atascárnoslos             --> atascároslos
+VMN0000   --> VMN0000+PP1CSA00+PP3MPA00 --> VMN0000+PP2CSA00+PP3MPA00 --> VMN0000+PP3CID00+PP3MPA00 --> VMN0000+PP1CPA00+PP3MPA00 --> VMN0000+PP2CPA00+PP3MPA00
+-ar           +ármelos                      +ártelos                      +árselos                      +árnoslos                     +ároslos
+-er           +érmelos                      +értelos                      +érselos                      +érnoslos                     +éroslos
+-ir           +írmelos                      +írtelos                      +írselos                      +írnoslos                     +íroslos
+... pass flat
+
+# atascar --> atascármela               --> atascártela               --> atascársela               --> atascárnosla              --> atascárosla
+VMN0000   --> VMN0000+PP1CSA00+PP3FSA00 --> VMN0000+PP2CSA00+PP3FSA00 --> VMN0000+PP3CID00+PP3FSA00 --> VMN0000+PP1CPA00+PP3FSA00 --> VMN0000+PP2CPA00+PP3FSA00
+-ar           +ármela                       +ártela                       +ársela                       +árnosla                      +árosla
+-er           +érmela                       +értela                       +érsela                       +érnosla                      +érosla
+-ir           +írmela                       +írtela                       +írsela                       +írnosla                      +írosla
+... pass flat
+
+# atascar --> atascármelas              --> atascártelas              --> atascárselas              --> atascárnoslas             --> atascároslas
+VMN0000   --> VMN0000+PP1CSA00+PP3FPA00 --> VMN0000+PP2CSA00+PP3FPA00 --> VMN0000+PP3CID00+PP3FPA00 --> VMN0000+PP1CPA00+PP3FPA00 --> VMN0000+PP2CPA00+PP3FPA00
+-ar           +ármelas                      +ártelas                      +árselas                      +árnoslas                     +ároslas
+-er           +érmelas                      +értelas                      +érselas                      +érnoslas                     +éroslas
+-ir           +írmelas                      +írtelas                      +írselas                      +írnoslas                     +íroslas
+... pass flat
+
+# atascar --> atascársele --> atascárseles
+VMN0000 --> VMN0000+PP3CID00+PP3FSD00 --> VMN0000+PP3CID00+PP3FPD00
+-ar         +ársele                       +árseles
+-er         +érsele                       +érseles
+-ir         +írsele                       +írseles
 ... pass flat
