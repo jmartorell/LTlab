@@ -19,13 +19,10 @@
 Script to create a sqlite database out of the words in the relevant pages of a Wikimedia backup dump.
 The database has the following tables and fields:
 
-catalogwiki{pedia|source}.sqlite
-    productions: table with the words and their ocurrences
+catalog.sqlite
+    {sourcename}: table with the words and their ocurrences, named via parameter.
         word TEXT PRIMARY KEY: instance of the word retrieved by the parser.
         ocurrences INTEGER: consolidated counting of the the word appearing in pages
-    counters: Table to keep track of progress for long operations
-        counter: description for the pointer
-        value: current value for the pointer
 
 Ideas for parsing large xml files taken from http://boscoh.com/programming/reading-xml-serially.html
 Ideas for updating word counters in the database taken from the accepted answer in
@@ -42,8 +39,6 @@ import progressbar as pb
 import wikifile
 
 
-
-
 nsmap = {}
 localCatalog = {}
 
@@ -57,14 +52,14 @@ reMeta = re.compile("\[\[[\s\S]+?\]\]")
 reMetaCategory = re.compile("\[\[Categor.+\]\]")
 reLink = re.compile("\[http.+\]")
 reTag = re.compile("<.+?>")
-reAccent_a = re.compile("\&aacute;")
-reAccent_e = re.compile("\&eacute;")
-reAccent_i = re.compile("\&iacute;")
-reAccent_o = re.compile("\&oacute;")
-reAccent_u = re.compile("\&uacute;")
-reDieresis = re.compile("\&uuml;")
-reNtilde = re.compile("\&ntilde;")
-reWord = re.compile("[a-záéíóúüñ]+([\-][a-záéíóúüñ]+)?")
+reAccent_a = re.compile("&aacute;")
+reAccent_e = re.compile("&eacute;")
+reAccent_i = re.compile("&iacute;")
+reAccent_o = re.compile("&oacute;")
+reAccent_u = re.compile("&uacute;")
+reDieresis = re.compile("&uuml;")
+reNtilde = re.compile("&ntilde;")
+reWord = re.compile("[a-záéíóúüñ]+[\-]?[a-záéíóúüñ]*")
 
 useful = True
 pageNo = 0  # Counter/pointer of page under inspection
@@ -85,20 +80,11 @@ estimatedPages = {'wikipedia': 3260545,
                   'wikinews': 28679,
                   'wikivoyage': 5790,
                   'wikiquote': 19415}  # For progress and estimation
-db_file = 'catalog' + file_base + '.sqlite'
+db_file = 'catalog.sqlite'
 
 estimated_pages = estimatedPages[file_base]
 
-# upsert = """INSERT OR REPLACE INTO productions
-# VALUES (:w,
-#   COALESCE(
-#     (SELECT ocurrences FROM productions
-#        WHERE word=:w),
-#     0) + :c);
-# """
-
-insert = """INSERT INTO productions
-VALUES (:w, :c)"""
+insert = 'INSERT INTO ' + file_base + ' VALUES (:w, :c)'
 
 
 def save_catalog():
@@ -118,21 +104,22 @@ def save_catalog():
         cursor.execute(insert, {"w": w, "c": localCatalog[w]})
         if progress % 5000 == 0:
             pb.draw_progress_bar(progress/total, start)
-    #cursor.execute("UPDATE counters set value = ? WHERE counter = 'page'", (pageNo,))
+
     conn.commit()
     cursor.close()
     pb.draw_progress_bar(1, start)
 
-    elapsedTime = time.time() - startTime
+    elapsed_time = time.time() - startTime
     try:
-        estimatedRemaining = int((estimated_pages - pageNo) / ((pageNo - lastPageNo) / elapsedTime))
+        estimated_remaining = int((estimated_pages - pageNo) / ((pageNo - lastPageNo) / elapsed_time))
     except:
-        estimatedRemaining = 0
+        estimated_remaining = 0
 
     print("Processed %i pages out of %i in %im %02is -- ETA: %im%02is" %
           (pageNo, estimated_pages,
-           int(elapsedTime) / 60, int(elapsedTime) % 60,
-           estimatedRemaining / 60, estimatedRemaining % 60))
+           int(elapsed_time) / 60, int(elapsed_time) % 60,
+           estimated_remaining / 60, estimated_remaining % 60))
+
 
 def prepare_database():
     """
@@ -142,21 +129,16 @@ def prepare_database():
     print("Checking integrity")
     connection = sqlite3.connect(db_file)
     cursor = connection.cursor()
-    cursor.execute("SELECT COUNT(name) FROM sqlite_master WHERE type='table' AND name='productions'")
+    cursor.execute("SELECT COUNT(name) FROM sqlite_master WHERE type='table' AND name=?", [file_base])
     global lastPageNo
     if cursor.fetchone()[0] > 0:
-        # cursor.execute("SELECT value FROM counters where counter ='page'")
-        # lastPageNo = cursor.fetchone()[0]
-        #print("Database already exists with %i pages processed." % lastPageNo)
-        cursor.execute("DELETE FROM TABLE productions")
-        print("Table initialized")
+        cursor.execute("DELETE FROM " + file_base)
+        print("Table %s initialized" % file_base)
     else:
         # Create table
-        cursor.execute("CREATE TABLE productions (word text PRIMARY KEY, ocurrences integer)")
-        #cursor.execute("CREATE TABLE counters (counter text, value integer)")
-        #cursor.execute("INSERT INTO counters values ('page', 0)")
+        cursor.execute("CREATE TABLE " + file_base + " (word text PRIMARY KEY, ocurrences integer)")
         connection.commit()
-        print("Database created")
+        print("Table %s created" % file_base)
     cursor.close()
     return connection
 
@@ -170,12 +152,6 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
     elif event == "start":
         if rePage.search(elem.tag) is not None:
             pageNo += 1
-            # if pageNo < lastPageNo:
-            #     if pageNo % 1000 == 0:
-            #         pb.draw_progress_bar(pageNo/lastPageNo, startTime)
-            # elif (pageNo - lastPageNo) % 20000 == 0:
-            #     save_catalog()
-            #     localCatalog.clear()
 
     elif event == 'end':
         if pageNo >= lastPageNo:
@@ -183,8 +159,7 @@ for event, elem in Etree.iterparse(filename, events=('start', 'end', 'start-ns',
                 useful = reTitleDiscard.match(elem.text) is None
                 if (pageNo - lastPageNo) % 1000 == 0:
                     pb.draw_progress_bar(pageNo/estimated_pages, startTime)
-                    #sys.stdout.write("\r%6i" % pageNo)
-                    #sys.stdout.write("\r%6s %s" % (useful, elem.text[:50].ljust(50)))
+
             else:
                 if reText.search(elem.tag):
                     if useful:
