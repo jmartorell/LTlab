@@ -209,3 +209,17 @@ Links or repairs links to the distribution and rules/disambiguator files.
   Starting from a hunspell dictionary, like the [Spanish spell dictionary for LibreOffice](https://github.com/LibreOffice/dictionaries/tree/master/es),
   creates a plain text dump file and builds a LT compatible spell dictionary.
   The dictionary needs to be in the `losc` directory (a link to the actual directory will do).
+
+* `crea_import.sh`
+
+  Processes and dumps into the catalog database the file obtained from the [word frequency list CREA](http://corpus.rae.es/lfrecuencias.html)
+  
+  Depends on the file `crea_ddl.sql`
+  
+* `dfl_import.sh`
+
+  Processes and dumps into the catalog database the file obtained from the [diccionario de frecuencias de Alameda y Cuetos (1995)](https://clbe.wordpress.com/2013/04/29/frecuencia-de-las-palabras-en-el-espanol/)
+    
+  Depends on the file `dfl_ddl.sql`  
+  
+  Note that the file must be preprocessed with a tool such as calc in order to create a suitable text file (`DFL.DBF.txt`)
