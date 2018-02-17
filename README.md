@@ -223,3 +223,17 @@ Links or repairs links to the distribution and rules/disambiguator files.
   Depends on the file `dfl_ddl.sql`  
   
   Note that the file must be preprocessed with a tool such as calc in order to create a suitable text file (`DFL.DBF.txt`)
+
+* `batch-catalog.sh`
+
+  Processes and dumps into the catalog database the files [downloaded from Wikimedia](https://dumps.wikimedia.org/backup-index.html).
+  
+  Depends on `mediawiki-catalog.py` and `wikifile.py`
+  
+* `merge-catalog.py`
+
+  Merges word catalog database with the dictionary, so maching generated words is easier.
+  
+* `productions-synth-export.sql`
+
+  Combines the generated productions with the existing ones. Export this query with `\t` as separator and ISO-8859-1 encoding as `dictionary.dump` ready for processing, check no headers are present.

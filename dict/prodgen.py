@@ -35,9 +35,13 @@ import os
 import re
 
 # source_cursor = conn.cursor()
-cmp_query ="""SELECT DISTINCT t.word, t.lemma, t.pos, w.pedia, w.source, w.quote, w.news, w.books, w.versity, w.voyage,
-                             s.word AS spell, tags.word AS tags
-        FROM tmp_synth t LEFT JOIN wikicatalog w USING(word)
+cmp_query ="""SELECT DISTINCT
+				t.word, t.lemma, t.pos,
+				c.crea, c.dfl,
+				c.wikipedia, c.wikisource, c.wikiquote, c.wikinews, c.wikibooks, c.wikiversity, c.wikivoyage,
+				c.tatoeba,
+                s.word AS spell, tags.word AS tags
+        FROM tmp_synth t LEFT JOIN catalog c USING(word)
         LEFT JOIN spell s USING(word)
         LEFT JOIN tags USING (word)"""
 
@@ -173,19 +177,22 @@ def production(src_conn, dst_conn, conv, morph, chk, ort):
             word = comparison[0]
             lemma = comparison[1]
             prod_pos = comparison[2]
-            pedia = int(comparison[3] or 0)
-            source = int(comparison[4] or 0)
-            quote = int(comparison[5] or 0)
-            news = int(comparison[6] or 0)
-            books = int(comparison[7] or 0)
-            versity = int(comparison[8] or 0)
-            voyage = int(comparison[9] or 0)
-            spell = int(0 if comparison[10] is None else 1)
-            lt = int(0 if comparison[11] is None else 1)
+            crea = int(comparison[3] or 0)
+            dfl = int(comparison[4] or 0)
+            pedia = int(comparison[5] or 0)
+            source = int(comparison[6] or 0)
+            quote = int(comparison[7] or 0)
+            news = int(comparison[8] or 0)
+            books = int(comparison[9] or 0)
+            versity = int(comparison[10] or 0)
+            voyage = int(comparison[11] or 0)
+            tatoeba =  int(comparison[12] or 0)
+            spell = int(0 if comparison[13] is None else 1)
+            lt = int(0 if comparison[14] is None else 1)
 
-            if not chk_corpus or (pedia + source + quote + news + books + versity + voyage +lt + spell > 1):
-                dst_conn.execute("INSERT INTO synth values(?,?,?,?,?,?,?,?,?,?,?,?)",
-                                 [word, lemma, prod_pos, spell, lt, pedia, source, quote, news, books, versity, voyage])
+            if not chk_corpus or (crea + dfl + pedia + source + quote + news + books + versity + voyage + tatoeba + lt + spell > 1):
+                dst_conn.execute("INSERT INTO synth values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                 [word, lemma, prod_pos, spell, lt, crea, dfl, pedia, source, quote, news, books, versity, voyage, tatoeba])
 
         # cmp_cursor.close()
         elapsed_time = time.time() - start
